@@ -1,0 +1,286 @@
+{% extends 'admin/dashboard.html' %}
+
+{% block body %}
+<div class="content">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+        <div>
+            <h4 class="page-title">{{ book.title }}</h4>
+            <p class="page-sub">by {{ book.author }}</p>
+        </div>
+        <a href="/myapp/view_books/" class="btn btn-outline-soft">
+            <i class="fa fa-arrow-left me-1"></i> Back to Books
+        </a>
+    </div>
+
+    <!-- Book Cover -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="panel">
+                <div class="panel-header">
+                    <strong><i class="fa fa-book me-2"></i>Book Cover</strong>
+                </div>
+                <div class="panel-body text-center">
+                    {% if book.cover_image %}
+                        <img src="/media/{{ book.cover_image }}" 
+                             alt="{{ book.title }}" 
+                             style="max-height: 300px; border-radius: 8px; box-shadow: var(--shadow-lift);">
+                    {% else %}
+                        <img src="https://placehold.co/300x400/9C1457/fff?text=No+Cover" 
+                             alt="No cover" 
+                             style="max-height: 300px; border-radius: 8px; box-shadow: var(--shadow-lift);">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Images -->
+    <div class="row">
+        <div class="col-12">
+            <div class="panel">
+                <div class="panel-header">
+                    <strong><i class="fa fa-images me-2"></i>Gallery Images</strong>
+                    <span class="badge bg-secondary">{{ images|length }} images</span>
+                </div>
+                <div class="panel-body">
+                    {% if images %}
+                        <div class="gallery-grid">
+                            {% for image in images %}
+                            <div class="gallery-item">
+                                <img src="/media/{{ image.image }}" 
+                                     alt="Gallery image {{ forloop.counter }}"
+                                     loading="lazy"
+                                     onclick="openLightbox('/media/{{ image.image }}')">
+                                <div class="gallery-item-overlay">
+                                    <span class="badge bg-light text-dark">Image {{ forloop.counter }}</span>
+                                    {% if forloop.first %}
+                                        <span class="badge bg-wine ms-1">Cover</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fa fa-images fa-3x text-muted mb-3 d-block"></i>
+                            <h5 class="text-muted">No Gallery Images</h5>
+                            <p class="text-muted">This book doesn't have any gallery images yet.</p>
+                            <a href="/myapp/edit-book/{{ book.id }}" class="btn btn-wine mt-2">
+                                <i class="fa fa-plus me-1"></i> Add Images
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightboxImg">
+    <div class="lightbox-caption" id="lightboxCaption">{{ book.title }} - Gallery Image</div>
+</div>
+
+<style>
+/* Gallery Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    aspect-ratio: 3/4;
+    background: var(--bg);
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lift);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+.gallery-item-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+    opacity: 1;
+}
+
+.gallery-item-overlay .badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.bg-wine {
+    background: var(--wine);
+    color: white;
+}
+
+/* Lightbox */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox.show {
+    display: flex;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    animation: lightboxFade 0.3s ease;
+}
+
+@keyframes lightboxFade {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.lightbox-close:hover {
+    color: var(--wine);
+    transform: rotate(90deg);
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+    
+    .gallery-item {
+        aspect-ratio: 2/3;
+    }
+    
+    .lightbox-close {
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+    }
+    
+    .lightbox-caption {
+        bottom: 20px;
+        font-size: 0.85rem;
+        padding: 6px 15px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .gallery-item {
+        aspect-ratio: 2/3;
+    }
+}
+
+/* Empty state icon */
+.fa-images.text-muted {
+    opacity: 0.3;
+}
+
+/* Book cover in panel */
+.panel-body img {
+    max-width: 100%;
+}
+</style>
+
+<script>
+// Lightbox functionality
+function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    lightboxImg.src = imageSrc;
+    lightbox.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
+
+// Also close lightbox when clicking outside the image (already handled by onclick on lightbox div)
+</script>
+{% endblock %}

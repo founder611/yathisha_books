@@ -1,0 +1,203 @@
+{% extends 'admin/dashboard.html' %}
+
+{% block body %}
+<div class="content">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+        <div>
+            <h4 class="page-title">Add New Book</h4>
+            <p class="page-sub">Add a new book to your Yatisha Books inventory.</p>
+        </div>
+        <a href="/myapp/dashboard/" class="btn btn-outline-soft">
+            <i class="fa fa-arrow-left me-1"></i> Back to Home
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="panel">
+                <div class="panel-header">
+                    <strong><i class="fa fa-book me-2"></i>Book Information</strong>
+                </div>
+                <div class="panel-body">
+                    <form action="/myapp/addbook_post/" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Book Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" class="form-control" 
+                                           placeholder="Enter Book Title" required>
+                                </div>
+                            </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label fw-semibold">
+                                    Book Genre <span class="text-danger">*</span>
+                                </label>
+
+                                <select name="genre" class="form-control" required>
+                                    <option value="">Select Genre</option>
+
+                                    <option value="Vedas">Vedas</option>
+                                    <option value="Upanishads">Upanishads</option>
+                                    <option value="Bhagavad Gita">Bhagavad Gita</option>
+                                    <option value="Ramayana">Ramayana</option>
+                                    <option value="Mahabharata">Mahabharata</option>
+                                    <option value="Puranas">Puranas</option>
+                                    <option value="Sri Vidya">Sri Vidya</option>
+                                    <option value="Shakta Tradition">Shakta Tradition</option>
+                                    <option value="Shaiva Tradition">Shaiva Tradition</option>
+                                    <option value="Vaishnava Tradition">Vaishnava Tradition</option>
+                                    <option value="Tantra">Tantra</option>
+                                    <option value="Mantra Shastra">Mantra Shastra</option>
+                                    <option value="Yantra & Tantra">Yantra & Tantra</option>
+                                    <option value="Yoga">Yoga</option>
+                                    <option value="Meditation">Meditation</option>
+                                    <option value="Vedanta">Vedanta</option>
+                                    <option value="Advaita Philosophy">Advaita Philosophy</option>
+                                    <option value="Bhakti">Bhakti</option>
+                                    <option value="Spiritual Psychology">Spiritual Psychology</option>
+                                    <option value="Devotional Literature">Devotional Literature</option>
+                                    <option value="Stotras & Sahasranamas">Stotras & Sahasranamas</option>
+                                    <option value="Temple Traditions">Temple Traditions</option>
+                                    <option value="Ayurveda">Ayurveda</option>
+                                    <option value="Jyotisha (Vedic Astrology)">Jyotisha (Vedic Astrology)</option>
+                                    <option value="Dharma & Ethics">Dharma & Ethics</option>
+                                    <option value="Guru Parampara">Guru Parampara</option>
+                                    <option value="Sanskrit Literature">Sanskrit Literature</option>
+                                    <option value="Children's Spiritual Books">Children's Spiritual Books</option>
+                                    <option value="Inspirational & Motivational">Inspirational & Motivational</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Author <span class="text-danger">*</span></label>
+                                    <input type="text" name="author" class="form-control" 
+                                           placeholder="Enter Author Name" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+                            <textarea name="description" class="form-control" 
+                                      rows="4" placeholder="Enter Book Description" required></textarea>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Cover Image <span class="text-danger">*</span></label>
+                                    <input type="file" name="cover_image" class="form-control" 
+                                           accept="image/*" onchange="previewCover(event)" required>
+                                    <div class="mt-2">
+                                        <img id="coverPreview" style="display:none; max-height:150px; border-radius:6px; border:1px solid #ddd;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Gallery Images</label>
+                                    <input type="file" name="gallery_images" class="form-control" 
+                                           accept="image/*" multiple onchange="previewGallery(event)">
+                                    <div class="preview-container mt-2 d-flex flex-wrap gap-2" id="galleryPreview"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Actual Price (₹) <span class="text-danger">*</span></label>
+                                    <input type="number" name="actual_price" class="form-control" 
+                                           step="0.01" min="0" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Discount Price (₹) <span class="text-danger">*</span></label>
+                                    <input type="number" name="discount_price" class="form-control" 
+                                           step="0.01" min="0" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Stock <span class="text-danger">*</span></label>
+                                    <input type="number" name="stock" class="form-control" 
+                                           min="1" value="1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-wine">
+                                <i class="fa fa-plus me-1"></i> Add Book
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Additional styles for the add book page */
+.form-control:focus {
+    border-color: var(--wine);
+    box-shadow: 0 0 0 0.2rem rgba(156, 20, 87, 0.15);
+}
+
+.preview-container img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+#coverPreview {
+    max-height: 150px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.form-label {
+    font-size: 0.85rem;
+    color: var(--ink);
+}
+</style>
+
+<script>
+function previewCover(event) {
+    let preview = document.getElementById("coverPreview");
+    if (event.target.files && event.target.files[0]) {
+        preview.src = URL.createObjectURL(event.target.files[0]);
+        preview.style.display = "block";
+        preview.style.maxHeight = "150px";
+    }
+}
+
+function previewGallery(event) {
+    let container = document.getElementById("galleryPreview");
+    container.innerHTML = "";
+    
+    Array.from(event.target.files).forEach(file => {
+        let img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.style.width = "80px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "6px";
+        img.style.border = "1px solid var(--border)";
+        container.appendChild(img);
+    });
+}
+</script>
+{% endblock %}

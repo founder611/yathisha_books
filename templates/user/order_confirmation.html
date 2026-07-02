@@ -1,0 +1,443 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation | Yathisha Books</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --cream: #FFFCF3;
+            --paper: #FFF6DE;
+            --turmeric: #F0A400;
+            --turmeric-deep: #C97D00;
+            --gold: #D9A441;
+            --gold-soft: #F3DA9C;
+            --vermilion: #9C2B2B;
+            --maroon: #5A1B1B;
+            --ink: #2B1E10;
+            --ink-soft: #6B583C;
+            --line: #EEDCA6;
+            --shadow: 0 18px 40px -18px rgba(43,30,16,.35);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Navbar */
+        .topbar { background: var(--maroon); color: var(--gold-soft); font-size: .82rem; }
+        .topbar .container { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; flex-wrap: wrap; gap: 6px; }
+        .topbar i { color: var(--turmeric); margin-right: 6px; }
+        .topbar .top-links a { margin-left: 18px; color: var(--gold-soft); opacity: .85; }
+        .topbar .top-links a:hover { opacity: 1; }
+
+        .navbar { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand .mark {
+            width: 46px; height: 46px; border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--turmeric) 75%);
+            display: flex; align-items: center; justify-content: center; color: var(--maroon);
+            font-size: 1.4rem; box-shadow: inset 0 0 0 2px var(--white);
+        }
+        .brand h1 { font-size: 1.5rem; }
+        .brand span { display: block; font-size: .68rem; letter-spacing: 2px; color: var(--ink-soft); text-transform: uppercase; font-family: 'Poppins'; }
+
+        .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { font-family: 'Poppins'; font-weight: 600; font-size: .92rem; position: relative; padding-bottom: 4px; }
+        .nav-links a:hover { color: var(--vermilion); }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+            font-family: 'Poppins'; font-weight: 600; border-radius: 999px; padding: 13px 26px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-gold { background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep)); color: #fff; box-shadow: 0 10px 22px -8px rgba(201,125,0,.55); }
+        .btn-gold:hover { box-shadow: 0 14px 28px -10px rgba(201,125,0,.7); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--maroon); color: var(--maroon); }
+        .btn-outline:hover { background: var(--maroon); color: #fff; }
+
+        /* Confirmation */
+        .confirmation-section {
+            padding: 60px 0;
+            background: var(--white);
+            min-height: 70vh;
+        }
+
+        .confirmation-box {
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .confirmation-box .success-icon {
+            font-size: 4rem;
+            color: #2d7d46;
+            margin-bottom: 16px;
+        }
+
+        .confirmation-box h1 {
+            font-family: 'Yatra One', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .confirmation-box .order-id {
+            font-size: 1.1rem;
+            color: var(--ink-soft);
+            margin-bottom: 24px;
+        }
+
+        .confirmation-box .order-id strong {
+            color: var(--maroon);
+        }
+
+        .order-details {
+            text-align: left;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 1px solid var(--line);
+        }
+
+        .order-details h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .order-details .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .order-details .row .label {
+            color: var(--ink-soft);
+        }
+
+        .order-details .row .value {
+            font-weight: 600;
+        }
+
+        .order-items {
+            margin: 16px 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.9rem;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item .item-name {
+            flex: 1;
+        }
+
+        .order-item .item-qty {
+            margin: 0 16px;
+            color: var(--ink-soft);
+        }
+
+        .order-item .item-price {
+            font-weight: 600;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-top: 2px solid var(--line);
+            margin-top: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--maroon);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--maroon);
+            color: var(--gold-soft);
+            padding: 56px 0 22px;
+            margin-top: 36px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: 34px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(243,218,156,.2);
+        }
+        footer h4 {
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 1.02rem;
+            font-family: 'Poppins';
+            font-weight: 600;
+        }
+        footer p, footer a {
+            color: var(--gold-soft);
+            opacity: .82;
+            font-size: .9rem;
+        }
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        footer ul a:hover { opacity: 1; text-decoration: underline; }
+        .footer-newsletter {
+            display: flex;
+            margin-top: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .footer-newsletter input {
+            flex: 1;
+            border: none;
+            padding: 11px 16px;
+            font-family: 'Poppins';
+        }
+        .footer-newsletter button {
+            border: none;
+            background: var(--turmeric);
+            color: #fff;
+            padding: 0 18px;
+            font-family: 'Poppins';
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: .8rem;
+            opacity: .72;
+        }
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+        .socials a {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(243,218,156,.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+        .socials a:hover {
+            background: var(--turmeric);
+            border-color: var(--turmeric);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .confirmation-box { padding: 24px; }
+            .confirmation-box h1 { font-size: 1.6rem; }
+            .action-buttons { flex-direction: column; align-items: center; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+    <div class="container">
+        <div><i class="fas fa-map-marker-alt"></i>Thiruvananthapuram, Kerala, India</div>
+        <div class="top-links">
+            <a href="#">About Us</a>
+            <a href="#">Become a Distributor</a>
+            <a href="#">Gift a Scripture</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/myapp/user_homepage/" class="brand">
+            <span class="mark">&#2384;</span>
+            <div>
+                <h1>Yathisha Books</h1>
+                <span>Sacred Texts & Spiritual Wisdom</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/myapp/user_homepage/">Home</a></li>
+            <li><a href="/myapp/user_homepage/#deities">Shop by Deity</a></li>
+            <li><a href="/myapp/user_homepage/#shelf">Sacred Texts</a></li>
+            <li><a href="/myapp/user_homepage/#bestsellers">Most Read</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== CONFIRMATION ===== -->
+<section class="confirmation-section">
+    <div class="container">
+        <div class="confirmation-box">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1>Order Confirmed! 🎉</h1>
+            <p class="order-id">
+                Order <strong>#{{ order.id }}</strong> has been placed successfully.
+            </p>
+            
+            <div class="order-details">
+                <h3><i class="fas fa-receipt"></i> Order Details</h3>
+                
+                <div class="row">
+                    <span class="label">Order ID</span>
+                    <span class="value">#{{ order.id }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Order Date</span>
+                    <span class="value">{{ order.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Status</span>
+                    <span class="value" style="color:#2d7d46;">{{ order.status }}</span>
+                </div>
+                
+                <h3 style="margin-top:20px;"><i class="fas fa-box"></i> Items Ordered</h3>
+                <div class="order-items">
+                    {% for item in order_items %}
+                    <div class="order-item">
+                        <span class="item-name">{{ item.book.title }}</span>
+                        <span class="item-qty">× {{ item.quantity }}</span>
+                        <span class="item-price">₹{{ item.price }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="order-total">
+                    <span>Total</span>
+                    <span>₹{{ order.total_amount|floatformat:2 }}</span>
+                </div>
+            </div>
+            
+            <div class="order-details" style="margin-top:16px;">
+                <h3><i class="fas fa-map-marker-alt"></i> Shipping Address</h3>
+                <p style="margin:0;">
+                    {{ order.address.fullname }}<br>
+                    {{ order.address.house }}<br>
+                    {{ order.address.city }}, {{ order.address.state }} - {{ order.address.pincode }}<br>
+                    Phone: {{ order.address.phone }}
+                </p>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/myapp/my_orders/" class="btn btn-outline">
+                    <i class="fas fa-list"></i> View All Orders
+                </a>
+                <a href="/myapp/user_homepage/" class="btn btn-gold">
+                    <i class="fas fa-home"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4>Yathisha Books</h4>
+                <p>A digital home for the Vedas, the Puranas, and every text in between.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div>
+                <h4>Traditions</h4>
+                <ul>
+                    <li><a href="#">Shaiva Tradition</a></li>
+                    <li><a href="#">Vaishnava Tradition</a></li>
+                    <li><a href="#">Shakta Tradition</a></li>
+                    <li><a href="#">Sri Vidya</a></li>
+                    <li><a href="#">Tantra</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="/myapp/my_orders/">My Orders</a></li>
+                    <li><a href="/myapp/view_wishlist/">Wishlist</a></li>
+                    <li><a href="#">Track a Package</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Reach Us</h4>
+                <p>Thiruvananthapuram, Kerala, India</p>
+                <p>hello@yathishagranthalaya.example</p>
+                <p>+91 00000 00000</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; Yathisha Granthalaya. All rights reserved.</span>
+            <span>&#2384; Sarve Bhavantu Sukhinah &#2384;</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

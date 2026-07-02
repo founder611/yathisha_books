@@ -1,0 +1,344 @@
+{% extends 'admin/dashboard.html' %}
+
+{% block body %}
+<div class="content">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+        <div>
+            <h4 class="page-title">Edit Book</h4>
+            <p class="page-sub">Update book information for "{{ book.title }}"</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/myapp/book-gallery/{{ book.id }}" class="btn btn-outline-soft">
+                <i class="fa fa-images me-1"></i> View Gallery
+            </a>
+            <a href="/myapp/view_books/" class="btn btn-outline-soft">
+                <i class="fa fa-arrow-left me-1"></i> Back to Books
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="panel">
+                <div class="panel-header">
+                    <strong><i class="fa fa-pen me-2"></i>Edit Book Information</strong>
+                </div>
+                <div class="panel-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" class="form-control" 
+                                           value="{{ book.title }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">
+                                        Book Genre <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select name="genre" class="form-control" required>
+                                        <option value="">Select Genre</option>
+
+                                        <option value="Vedas" {% if book.genre == "Vedas" %}selected{% endif %}>Vedas</option>
+
+                                        <option value="Upanishads" {% if book.genre == "Upanishads" %}selected{% endif %}>Upanishads</option>
+
+                                        <option value="Bhagavad Gita" {% if book.genre == "Bhagavad Gita" %}selected{% endif %}>Bhagavad Gita</option>
+
+                                        <option value="Ramayana" {% if book.genre == "Ramayana" %}selected{% endif %}>Ramayana</option>
+
+                                        <option value="Mahabharata" {% if book.genre == "Mahabharata" %}selected{% endif %}>Mahabharata</option>
+
+                                        <option value="Puranas" {% if book.genre == "Puranas" %}selected{% endif %}>Puranas</option>
+
+                                        <option value="Sri Vidya" {% if book.genre == "Sri Vidya" %}selected{% endif %}>Sri Vidya</option>
+
+                                        <option value="Shakta Tradition" {% if book.genre == "Shakta Tradition" %}selected{% endif %}>Shakta Tradition</option>
+
+                                        <option value="Shaiva Tradition" {% if book.genre == "Shaiva Tradition" %}selected{% endif %}>Shaiva Tradition</option>
+
+                                        <option value="Vaishnava Tradition" {% if book.genre == "Vaishnava Tradition" %}selected{% endif %}>Vaishnava Tradition</option>
+
+                                        <option value="Tantra" {% if book.genre == "Tantra" %}selected{% endif %}>Tantra</option>
+
+                                        <option value="Mantra Shastra" {% if book.genre == "Mantra Shastra" %}selected{% endif %}>Mantra Shastra</option>
+
+                                        <option value="Yantra & Tantra" {% if book.genre == "Yantra & Tantra" %}selected{% endif %}>Yantra & Tantra</option>
+
+                                        <option value="Yoga" {% if book.genre == "Yoga" %}selected{% endif %}>Yoga</option>
+
+                                        <option value="Meditation" {% if book.genre == "Meditation" %}selected{% endif %}>Meditation</option>
+
+                                        <option value="Vedanta" {% if book.genre == "Vedanta" %}selected{% endif %}>Vedanta</option>
+
+                                        <option value="Advaita Philosophy" {% if book.genre == "Advaita Philosophy" %}selected{% endif %}>Advaita Philosophy</option>
+
+                                        <option value="Bhakti" {% if book.genre == "Bhakti" %}selected{% endif %}>Bhakti</option>
+
+                                        <option value="Spiritual Psychology" {% if book.genre == "Spiritual Psychology" %}selected{% endif %}>Spiritual Psychology</option>
+
+                                        <option value="Devotional Literature" {% if book.genre == "Devotional Literature" %}selected{% endif %}>Devotional Literature</option>
+
+                                        <option value="Stotras & Sahasranamas" {% if book.genre == "Stotras & Sahasranamas" %}selected{% endif %}>Stotras & Sahasranamas</option>
+
+                                        <option value="Temple Traditions" {% if book.genre == "Temple Traditions" %}selected{% endif %}>Temple Traditions</option>
+
+                                        <option value="Ayurveda" {% if book.genre == "Ayurveda" %}selected{% endif %}>Ayurveda</option>
+
+                                        <option value="Jyotisha (Vedic Astrology)" {% if book.genre == "Jyotisha (Vedic Astrology)" %}selected{% endif %}>Jyotisha (Vedic Astrology)</option>
+
+                                        <option value="Dharma & Ethics" {% if book.genre == "Dharma & Ethics" %}selected{% endif %}>Dharma & Ethics</option>
+
+                                        <option value="Guru Parampara" {% if book.genre == "Guru Parampara" %}selected{% endif %}>Guru Parampara</option>
+
+                                        <option value="Sanskrit Literature" {% if book.genre == "Sanskrit Literature" %}selected{% endif %}>Sanskrit Literature</option>
+
+                                        <option value="Children's Spiritual Books" {% if book.genre == "Children's Spiritual Books" %}selected{% endif %}>Children's Spiritual Books</option>
+
+                                        <option value="Inspirational & Motivational" {% if book.genre == "Inspirational & Motivational" %}selected{% endif %}>Inspirational & Motivational</option>
+
+                                        <option value="Other" {% if book.genre == "Other" %}selected{% endif %}>Other</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Author <span class="text-danger">*</span></label>
+                                    <input type="text" name="author" class="form-control" 
+                                           value="{{ book.author }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+                            <textarea name="description" class="form-control" 
+                                      rows="4" required>{{ book.description }}</textarea>
+                        </div>
+
+                        <!-- Current Cover -->
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Current Cover</label>
+                            <div class="mt-2">
+                                {% if book.cover_image %}
+                                    <img src="/media/{{ book.cover_image }}" 
+                                         alt="{{ book.title }}" 
+                                         style="max-height: 200px; border-radius: 8px; box-shadow: var(--shadow);">
+                                {% else %}
+                                    <img src="https://placehold.co/200x280/9C1457/fff?text=No+Cover" 
+                                         alt="No cover" 
+                                         style="max-height: 200px; border-radius: 8px; box-shadow: var(--shadow);">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Change Cover -->
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Change Cover Image</label>
+                            <input type="file" name="cover_image" class="form-control" 
+                                   accept="image/*" onchange="previewCover(event)">
+                            <div class="mt-2">
+                                <img id="coverPreview" style="display:none; max-height: 150px; border-radius: 6px; border: 1px solid #ddd;">
+                            </div>
+                            <small class="text-muted">Leave empty to keep the current cover.</small>
+                        </div>
+
+                        <!-- Current Gallery -->
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Current Gallery Images</label>
+                            <div class="gallery-grid mt-2">
+                                {% for img in book.images.all %}
+                                    <div class="gallery-item">
+                                        <img src="/media/{{ img.image }}" alt="Gallery image">
+                                        <div class="gallery-item-overlay">
+                                            <span class="badge bg-light text-dark">Image {{ forloop.counter }}</span>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <div class="text-muted p-3 bg-light rounded">
+                                        <i class="fa fa-images me-2"></i> No gallery images
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Add Gallery Images -->
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-semibold">Add More Gallery Images</label>
+                            <input type="file" name="gallery_images" class="form-control" 
+                                   multiple accept="image/*" onchange="previewGallery(event)">
+                            <div class="preview-container mt-2 d-flex flex-wrap gap-2" id="galleryPreview"></div>
+                            <small class="text-muted">You can select multiple images. Existing images will be preserved.</small>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Actual Price (₹) <span class="text-danger">*</span></label>
+                                    <input type="number" name="actual_price" class="form-control" 
+                                           step="0.01" min="0" value="{{ book.actual_price }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Discount Price (₹) <span class="text-danger">*</span></label>
+                                    <input type="number" name="discount_price" class="form-control" 
+                                           step="0.01" min="0" value="{{ book.discount_price }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="form-label fw-semibold">Stock <span class="text-danger">*</span></label>
+                                    <input type="number" name="stock" class="form-control" 
+                                           min="0" value="{{ book.stock }}" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <button type="submit" class="btn btn-wine">
+                                <i class="fa fa-save me-1"></i> Update Book
+                            </button>
+                            <a href="/myapp/view_books/" class="btn btn-outline-soft">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Gallery Grid for current images */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-item-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-item-overlay .badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.preview-container img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.form-control:focus {
+    border-color: var(--wine);
+    box-shadow: 0 0 0 0.2rem rgba(156, 20, 87, 0.15);
+}
+
+.form-label {
+    font-size: 0.85rem;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 10px;
+    }
+    
+    .preview-container img {
+        width: 60px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 8px;
+    }
+}
+
+/* Form styling */
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+</style>
+
+<script>
+function previewCover(event) {
+    let preview = document.getElementById("coverPreview");
+    if (event.target.files && event.target.files[0]) {
+        preview.src = URL.createObjectURL(event.target.files[0]);
+        preview.style.display = "block";
+        preview.style.maxHeight = "150px";
+    }
+}
+
+function previewGallery(event) {
+    let container = document.getElementById("galleryPreview");
+    container.innerHTML = "";
+    
+    Array.from(event.target.files).forEach(file => {
+        let img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.style.width = "80px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "6px";
+        img.style.border = "1px solid var(--border)";
+        container.appendChild(img);
+    });
+}
+
+// Form validation - ensure discount price is not higher than actual price
+document.querySelector('form').addEventListener('submit', function(e) {
+    const actualPrice = parseFloat(document.querySelector('[name="actual_price"]').value);
+    const discountPrice = parseFloat(document.querySelector('[name="discount_price"]').value);
+    
+    if (discountPrice > actualPrice) {
+        e.preventDefault();
+        alert('Discount price cannot be higher than actual price!');
+    }
+});
+</script>
+{% endblock %}

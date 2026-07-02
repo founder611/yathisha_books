@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Yathisha Books</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .payment-container {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .payment-container h1 {
+            text-align: center;
+            color: #2B1E10;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .payment-container .subtitle {
+            text-align: center;
+            color: #6B583C;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .order-summary {
+            background: #FFFCF3;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #EEDCA6;
+        }
+        .order-summary .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        .order-summary .row.total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-top: 2px solid #EEDCA6;
+            padding-top: 10px;
+            margin-top: 6px;
+        }
+        .order-summary .row .label {
+            color: #6B583C;
+        }
+        .order-summary .row .value {
+            font-weight: 600;
+        }
+        .payment-loader {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .payment-loader i {
+            font-size: 3rem;
+            color: #F0A400;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .payment-loader p {
+            color: #6B583C;
+            margin-top: 12px;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .btn-retry {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #F0A400;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-retry:hover {
+            background: #C97D00;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="payment-container">
+        <h1>Yathisha Books</h1>
+        <p class="subtitle">Complete your payment securely</p>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <div class="row">
+                <span class="label">Items</span>
+                <span class="value">{{ cart_items|length }}</span>
+            </div>
+            <div class="row">
+                <span class="label">Total Amount</span>
+                <span class="value">₹{{ total|floatformat:2 }}</span>
+            </div>
+            <div class="row total">
+                <span class="label">Amount to Pay</span>
+                <span class="value">₹{{ total|floatformat:2 }}</span>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <form id="payment-form" method="POST" action="{% url 'razorpay_payment_success' %}">
+            {% csrf_token %}
+            
+            <!-- Hidden fields -->
+            <input type="hidden" name="payment_id" id="payment_id" value="{{ payment_id }}">
+            <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+            <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+            
+            <!-- Address fields -->
+            <input type="hidden" name="fullname" value="{{ user.get_full_name|default:user.username }}">
+            <input type="hidden" name="phone" value="{{ address.phone|default:'' }}">
+            <input type="hidden" name="address" value="{{ address.house|default:'' }}">
+            <input type="hidden" name="city" value="{{ address.city|default:'' }}">
+            <input type="hidden" name="state" value="{{ address.state|default:'' }}">
+            <input type="hidden" name="pincode" value="{{ address.pincode|default:'' }}">
+        </form>
+
+        <!-- Loading State -->
+        <div class="payment-loader" id="paymentLoader">
+            <i class="fas fa-spinner"></i>
+            <p>Redirecting to payment gateway...</p>
+        </div>
+
+        <!-- Error Message (hidden by default) -->
+        <div class="error-message" id="errorMessage" style="display:none;">
+            <p>Something went wrong. Please try again.</p>
+            <a href="/myapp/checkout/" class="btn-retry" style="margin-top:10px;">← Go Back to Checkout</a>
+        </div>
+    </div>
+
+    <script>
+        var options = {
+            key: "{{ razorpay_api_key }}",
+            amount: "{{ amount }}",
+            currency: "{{ currency }}",
+            name: "Yathisha Books",
+            description: "Order Payment",
+            image: "{% static 'images/logo.png' %}",
+            prefill: {
+                name: "{{ user.get_full_name|default:user.username }}",
+                email: "{{ user.email }}",
+                contact: "{{ address.phone|default:'' }}"
+            },
+            notes: {
+                address: "{{ address.house|default:'' }}",
+                user_id: "{{ user.id }}"
+            },
+            theme: {
+                color: "#F0A400"
+            },
+            modal: {
+                ondismiss: function() {
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('paymentLoader').style.display = 'none';
+                }
+            },
+            handler: function(response) {
+                console.log("Payment Success", response);
+                
+                // Set Razorpay response in hidden fields
+                document.getElementById("razorpay_order_id").value = response.razorpay_order_id;
+                document.getElementById("razorpay_payment_id").value = response.razorpay_payment_id;
+                document.getElementById("razorpay_signature").value = response.razorpay_signature;
+                
+                // Show loading
+                document.getElementById('paymentLoader').innerHTML = '<i class="fas fa-spinner"></i><p>Processing your order...</p>';
+                
+                // Submit form
+                document.getElementById("payment-form").submit();
+            },
+            timeout: function() {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('paymentLoader').style.display = 'none';
+            }
+        };
+
+        // Initialize Razorpay
+        var rzp = new Razorpay(options);
+
+        // Auto Open Razorpay Popup
+        window.onload = function() {
+            setTimeout(function() {
+                rzp.open();
+            }, 500);
+        };
+
+        // Fallback - if popup doesn't open
+        setTimeout(function() {
+            var loader = document.getElementById('paymentLoader');
+            if (loader) {
+                loader.innerHTML = `
+                    <p style="color:var(--ink-soft);">Payment window didn't open?</p>
+                    <button onclick="rzp.open()" class="btn-retry" style="margin-top:12px;">
+                        <i class="fas fa-credit-card"></i> Click to Pay Now
+                    </button>
+                `;
+            }
+        }, 5000);
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+</body>
+</html>

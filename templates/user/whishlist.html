@@ -1,0 +1,692 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Wishlist | Yathisha Books</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    
+    <style>
+        :root {
+            --white: #ffffff;
+            --cream: #FFFCF3;
+            --paper: #FFF6DE;
+            --turmeric: #F0A400;
+            --turmeric-deep: #C97D00;
+            --gold: #D9A441;
+            --gold-soft: #F3DA9C;
+            --vermilion: #9C2B2B;
+            --maroon: #5A1B1B;
+            --ink: #2B1E10;
+            --ink-soft: #6B583C;
+            --line: #EEDCA6;
+            --shadow: 0 18px 40px -18px rgba(43,30,16,.35);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== TOP BAR ===== */
+        .topbar { background: var(--maroon); color: var(--gold-soft); font-size: .82rem; }
+        .topbar .container { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; flex-wrap: wrap; gap: 6px; }
+        .topbar i { color: var(--turmeric); margin-right: 6px; }
+        .topbar .top-links a { margin-left: 18px; color: var(--gold-soft); opacity: .85; }
+        .topbar .top-links a:hover { opacity: 1; }
+
+        /* ===== NAVBAR ===== */
+        .navbar { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand .mark {
+            width: 46px; height: 46px; border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--turmeric) 75%);
+            display: flex; align-items: center; justify-content: center; color: var(--maroon);
+            font-size: 1.4rem; box-shadow: inset 0 0 0 2px var(--white);
+        }
+        .brand h1 { font-size: 1.5rem; }
+        .brand span { display: block; font-size: .68rem; letter-spacing: 2px; color: var(--ink-soft); text-transform: uppercase; font-family: 'Poppins'; }
+
+        .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { font-family: 'Poppins'; font-weight: 600; font-size: .92rem; position: relative; padding-bottom: 4px; }
+        .nav-links a:hover { color: var(--vermilion); }
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+        .icon-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: center; position: relative;
+            color: var(--ink); background: var(--cream);
+            transition: all 0.3s ease;
+        }
+        .icon-btn:hover {
+            background: var(--turmeric);
+            color: #fff;
+            border-color: var(--turmeric);
+            transform: translateY(-2px);
+        }
+        .icon-btn .badge {
+            position: absolute; top: -6px; right: -6px; background: var(--vermilion); color: #fff;
+            font-size: .65rem; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--white);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+            font-family: 'Poppins'; font-weight: 600; border-radius: 999px; padding: 13px 26px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-gold { background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep)); color: #fff; box-shadow: 0 10px 22px -8px rgba(201,125,0,.55); }
+        .btn-gold:hover { box-shadow: 0 14px 28px -10px rgba(201,125,0,.7); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--maroon); color: var(--maroon); }
+        .btn-outline:hover { background: var(--maroon); color: #fff; }
+
+        /* ===== MESSAGES ===== */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .messages li {
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .messages .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .messages .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .messages .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* ===== WISHLIST SECTION ===== */
+        .wishlist-section {
+            padding: 50px 0 60px;
+            background: var(--white);
+            min-height: 70vh;
+        }
+
+        .wishlist-section h1 {
+            font-family: 'Yatra One', cursive;
+            font-size: 2.4rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .wishlist-section h1 i {
+            color: var(--vermilion);
+        }
+
+        .wishlist-section h1 .count {
+            font-size: 1rem;
+            color: var(--ink-soft);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+
+        /* ===== WISHLIST GRID ===== */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .wishlist-item {
+            background: var(--cream);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -12px rgba(43,30,16,0.4);
+        }
+
+        .wishlist-item .book-cover {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .wishlist-item .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .wishlist-item:hover .book-cover img {
+            transform: scale(1.05);
+        }
+
+        .wishlist-item .remove-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vermilion);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .wishlist-item .remove-btn:hover {
+            background: var(--vermilion);
+            color: #fff;
+            border-color: var(--vermilion);
+            transform: scale(1.1);
+        }
+
+        .wishlist-item .discount-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--vermilion);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .wishlist-item .book-info {
+            padding: 18px;
+        }
+
+        .wishlist-item .book-info .genre-tag {
+            display: inline-block;
+            background: var(--paper);
+            color: var(--ink-soft);
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--gold-soft);
+            margin-bottom: 6px;
+        }
+
+        .wishlist-item .book-info h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .wishlist-item .book-info .author {
+            color: var(--ink-soft);
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+
+        .wishlist-item .book-info .rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 6px;
+        }
+
+        .wishlist-item .book-info .rating i {
+            color: var(--turmeric);
+            font-size: 0.75rem;
+        }
+
+        .wishlist-item .book-info .rating .count {
+            color: var(--ink-soft);
+            font-size: 0.7rem;
+            margin-left: 4px;
+        }
+
+        .wishlist-item .book-info .pricing {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .wishlist-item .book-info .pricing .original {
+            color: var(--ink-soft);
+            text-decoration: line-through;
+            font-size: 0.8rem;
+        }
+
+        .wishlist-item .book-info .pricing .discount {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--maroon);
+        }
+
+        .wishlist-item .book-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .wishlist-item .book-actions .btn {
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            justify-content: center;
+            border-radius: 999px;
+        }
+
+        .btn-move-cart {
+            background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep));
+            color: #fff;
+        }
+
+        .btn-move-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -6px rgba(201,125,0,0.5);
+        }
+
+        .btn-view-detail {
+            border: 1.5px solid var(--turmeric);
+            color: var(--turmeric-deep);
+            background: transparent;
+        }
+
+        .btn-view-detail:hover {
+            background: var(--turmeric);
+            color: #fff;
+        }
+
+        /* ===== EMPTY WISHLIST ===== */
+        .empty-wishlist {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-wishlist img {
+            width: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .empty-wishlist h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-wishlist p {
+            color: var(--ink-soft);
+            margin-bottom: 24px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--maroon);
+            color: var(--gold-soft);
+            padding: 56px 0 22px;
+            margin-top: 36px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: 34px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(243,218,156,.2);
+        }
+        footer h4 {
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 1.02rem;
+            font-family: 'Poppins';
+            font-weight: 600;
+        }
+        footer p, footer a {
+            color: var(--gold-soft);
+            opacity: .82;
+            font-size: .9rem;
+        }
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        footer ul a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        .footer-newsletter {
+            display: flex;
+            margin-top: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .footer-newsletter input {
+            flex: 1;
+            border: none;
+            padding: 11px 16px;
+            font-family: 'Poppins';
+        }
+        .footer-newsletter button {
+            border: none;
+            background: var(--turmeric);
+            color: #fff;
+            padding: 0 18px;
+            font-family: 'Poppins';
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .footer-newsletter button:hover {
+            background: var(--turmeric-deep);
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: .8rem;
+            opacity: .72;
+        }
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+        .socials a {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(243,218,156,.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+        .socials a:hover {
+            background: var(--turmeric);
+            border-color: var(--turmeric);
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-links {
+                display: none;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wishlist-section h1 {
+                font-size: 1.8rem;
+            }
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            .wishlist-item .book-cover {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+            .wishlist-item .book-cover {
+                height: 220px;
+            }
+            .wishlist-item .book-actions {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .wishlist-section h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+    <div class="container">
+        <div><i class="fas fa-map-marker-alt"></i>Thiruvananthapuram, Kerala, India</div>
+        <div class="top-links">
+            <a href="#">About Us</a>
+            <a href="#">Become a Distributor</a>
+            <a href="#">Gift a Scripture</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/myapp/user_homepage/" class="brand">
+            <span class="mark">&#2384;</span>
+            <div>
+                <h1>Yathisha Books</h1>
+                <span>Sacred Texts & Spiritual Wisdom</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/myapp/user_homepage/">Home</a></li>
+            <li><a href="/myapp/user_homepage/#deities">Shop by Deity</a></li>
+            <li><a href="/myapp/user_homepage/#shelf">Sacred Texts</a></li>
+            <li><a href="/myapp/user_homepage/#bestsellers">Most Read</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="/myapp/search_books/" class="icon-btn">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="/myapp/view_wishlist/" class="icon-btn">
+                <i class="fas fa-heart"></i>
+                {% if wishlist_count > 0 %}
+                <span class="badge">{{ wishlist_count }}</span>
+                {% endif %}
+            </a>
+            <a href="/myapp/view_cart/" class="icon-btn">
+                <i class="fas fa-shopping-bag"></i>
+                {% if cart_count > 0 %}
+                <span class="badge">{{ cart_count }}</span>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== WISHLIST SECTION ===== -->
+<section class="wishlist-section">
+    <div class="container">
+        <h1>
+            <i class="fas fa-heart"></i> 
+            My Wishlist
+            <span class="count">({{ wishlist.count }} items)</span>
+        </h1>
+
+        <!-- Messages -->
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if wishlist %}
+        <div class="wishlist-grid">
+            {% for item in wishlist %}
+            <div class="wishlist-item">
+                <div class="book-cover">
+                    <img src="{{ item.book.cover_image.url }}" alt="{{ item.book.title }}">
+                    
+                    <!-- Remove Button -->
+                    <a href="/myapp/remove_from_wishlist/{{ item.book.id }}/" class="remove-btn" title="Remove from Wishlist" onclick="return confirm('Remove this book from your wishlist?')">
+                        <i class="fas fa-times"></i>
+                    </a>
+                    
+                    <!-- Discount Badge -->
+                    {% if item.book.discount_price %}
+                    <span class="discount-badge">Sale</span>
+                    {% endif %}
+                </div>
+                
+                <div class="book-info">
+                    <span class="genre-tag">{{ item.book.genre }}</span>
+                    <h3>{{ item.book.title }}</h3>
+                    <p class="author">{{ item.book.author }}</p>
+                    
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="count">({{ item.book.review_count|default:0 }})</span>
+                    </div>
+                    
+                    <div class="pricing">
+                        {% if item.book.discount_price %}
+                        <span class="original">₹{{ item.book.actual_price }}</span>
+                        <span class="discount">₹{{ item.book.discount_price }}</span>
+                        {% else %}
+                        <span class="discount">₹{{ item.book.actual_price }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="book-actions">
+                        <a href="/myapp/move_to_cart/{{ item.book.id }}/" class="btn btn-move-cart">
+                            <i class="fas fa-shopping-cart"></i> Move to Cart
+                        </a>
+                        <a href="/myapp/user_view_book_details/{{ item.book.id }}/" class="btn btn-view-detail">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty Wishlist -->
+        <div class="empty-wishlist">
+            <img src="{% static 'images/empty-wishlist.png' %}" alt="Empty Wishlist">
+            <h3>Your wishlist is empty</h3>
+            <p>Start adding your favourite sacred texts and spiritual books to your wishlist.</p>
+            <a href="/myapp/user_homepage/#shelf" class="btn btn-gold">
+                <i class="fas fa-book-open"></i> Browse Books
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4>Yathisha Books</h4>
+                <p>A digital home for the Vedas, the Puranas, and every text in between.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div>
+                <h4>Traditions</h4>
+                <ul>
+                    <li><a href="#">Shaiva Tradition</a></li>
+                    <li><a href="#">Vaishnava Tradition</a></li>
+                    <li><a href="#">Shakta Tradition</a></li>
+                    <li><a href="#">Sri Vidya</a></li>
+                    <li><a href="#">Tantra</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">My Orders</a></li>
+                    <li><a href="/myapp/view_wishlist/">Wishlist</a></li>
+                    <li><a href="#">Track a Package</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Reach Us</h4>
+                <p>Thiruvananthapuram, Kerala, India</p>
+                <p>hello@yathishagranthalaya.example</p>
+                <p>+91 00000 00000</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; Yathisha Granthalaya. All rights reserved.</span>
+            <span>&#2384; Sarve Bhavantu Sukhinah &#2384;</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

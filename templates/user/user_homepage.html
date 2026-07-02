@@ -1,0 +1,1181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yathisha Books | Sacred Texts & Spiritual Wisdom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Yathisha Books — an online library of Vedas, Puranas, Itihasas, Stotras and spiritual texts, curated for the modern seeker.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+    <style>
+    /* ===================== DESIGN TOKENS ===================== */
+    :root{
+        --white:#ffffff;
+        --cream:#FFFCF3;
+        --paper:#FFF6DE;
+        --turmeric:#F0A400;
+        --turmeric-deep:#C97D00;
+        --gold:#D9A441;
+        --gold-soft:#F3DA9C;
+        --vermilion:#9C2B2B;
+        --maroon:#5A1B1B;
+        --ink:#2B1E10;
+        --ink-soft:#6B583C;
+        --line:#EEDCA6;
+        --shadow:0 18px 40px -18px rgba(43,30,16,.35);
+    }
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+        margin:0; background:var(--cream); color:var(--ink);
+        font-family:'Poppins', sans-serif; line-height:1.65;
+    }
+    h1,h2,h3,h4{ font-family:'Yatra One', cursive; font-weight:400; margin:0; color:var(--ink); }
+    a{ text-decoration:none; color:inherit; }
+    img{ max-width:100%; display:block; }
+    .container{ max-width:1200px; margin:0 auto; padding:0 24px; }
+    .eyebrow{
+        font-family:'Cormorant Garamond', serif; font-style:italic; font-size:1.1rem;
+        color:var(--vermilion); letter-spacing:.4px;
+    }
+
+    /* ===================== DECORATIVE MOTIF ===================== */
+    .ornament-divider{
+        display:flex; align-items:center; justify-content:center; gap:14px;
+        margin:6px 0 46px; color:var(--turmeric-deep);
+    }
+    .ornament-divider::before, .ornament-divider::after{
+        content:""; height:1px; width:110px;
+        background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .ornament-divider svg{ width:24px; height:24px; }
+
+    /* ===================== TOP BAR ===================== */
+    .topbar{ background:var(--maroon); color:var(--gold-soft); font-size:.82rem; }
+    .topbar .container{ display:flex; justify-content:space-between; align-items:center; padding:8px 24px; flex-wrap:wrap; gap:6px; }
+    .topbar i{ color:var(--turmeric); margin-right:6px; }
+    .topbar .top-links a{ margin-left:18px; color:var(--gold-soft); opacity:.85; }
+    .topbar .top-links a:hover{ opacity:1; }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar{ background:var(--white); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50; }
+    .navbar .container{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .brand .mark{
+        width:46px; height:46px; border-radius:50%;
+        background:radial-gradient(circle at 35% 30%, var(--gold-soft), var(--turmeric) 75%);
+        display:flex; align-items:center; justify-content:center; color:var(--maroon);
+        font-size:1.4rem; box-shadow:inset 0 0 0 2px var(--white);
+    }
+    .brand h1{ font-size:1.5rem; }
+    .brand span{ display:block; font-size:.68rem; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-family:'Poppins'; }
+
+    .nav-links{ display:flex; gap:30px; list-style:none; margin:0; padding:0; }
+    .nav-links a{ font-family:'Poppins'; font-weight:600; font-size:.92rem; position:relative; padding-bottom:4px; }
+    .nav-links a.active, .nav-links a:hover{ color:var(--vermilion); }
+    .nav-links a.active::after{ content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--turmeric); }
+    .nav-actions{ display:flex; align-items:center; gap:16px; }
+    .icon-btn{
+        width:40px; height:40px; border-radius:50%; border:1px solid var(--line);
+        display:flex; align-items:center; justify-content:center; position:relative;
+        color:var(--ink); background:var(--cream);
+        transition: all 0.3s ease;
+    }
+    .icon-btn:hover{
+        background:var(--turmeric);
+        color:#fff;
+        border-color:var(--turmeric);
+        transform:translateY(-2px);
+    }
+    .icon-btn .badge{
+        position:absolute; top:-6px; right:-6px; background:var(--vermilion); color:#fff;
+        font-size:.65rem; width:20px; height:20px; border-radius:50%; align-items:center; justify-content:center;
+        font-weight:600;
+        border:2px solid var(--white);
+    }
+
+    /* ===================== HERO ===================== */
+    .hero{
+        background:
+            radial-gradient(circle at 10% 20%, var(--gold-soft) 0, transparent 42%),
+            radial-gradient(circle at 92% 85%, var(--paper) 0, transparent 45%),
+            var(--cream);
+        padding:70px 0 56px; overflow:hidden;
+    }
+    .hero .grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; }
+    .hero h2{ font-size:2.9rem; line-height:1.2; margin:12px 0 18px; }
+    .hero h2 em{ font-style:normal; color:var(--vermilion); }
+    .hero p.lede{ color:var(--ink-soft); max-width:480px; margin-bottom:28px; font-size:1.02rem; }
+
+    .searchbar{
+        display:flex; background:var(--white); border:1.5px solid var(--line); border-radius:999px;
+        padding:6px; box-shadow:var(--shadow); max-width:520px; margin-bottom:24px;
+    }
+    .searchbar select{ border:none; background:transparent; padding:12px 10px; color:var(--ink-soft); border-right:1px solid var(--line); font-family:'Poppins'; }
+    .searchbar input{ flex:1; border:none; outline:none; padding:12px 14px; font-size:.95rem; background:transparent; font-family:'Poppins'; }
+    .btn{
+        display:inline-flex; align-items:center; gap:8px; border:none; cursor:pointer;
+        font-family:'Poppins'; font-weight:600; border-radius:999px; padding:13px 26px; transition:transform .15s ease;
+    }
+    .btn:hover{ transform:translateY(-2px); }
+    .btn-gold{ background:linear-gradient(180deg, var(--turmeric), var(--turmeric-deep)); color:#fff; box-shadow:0 10px 22px -8px rgba(201,125,0,.55); }
+    .btn-gold:hover{ box-shadow:0 14px 28px -10px rgba(201,125,0,.7); }
+    .btn-outline{ background:transparent; border:1.5px solid var(--maroon); color:var(--maroon); }
+    .btn-outline:hover{ background:var(--maroon); color:#fff; }
+    .hero .cta-row{ display:flex; gap:16px; flex-wrap:wrap; }
+
+    .hero-art{ position:relative; height:420px; display:flex; align-items:center; justify-content:center; }
+    .arch{
+        position:absolute; bottom:20px; width:300px; height:340px;
+        border:3px solid var(--gold);
+        border-bottom:none;
+        border-radius:150px 150px 10px 10px;
+        background:linear-gradient(180deg, rgba(243,218,156,.35), transparent 60%);
+    }
+    .arch::before{
+        content:""; position:absolute; inset:-14px -14px auto -14px; height:26px;
+        background:linear-gradient(90deg, transparent, var(--turmeric), transparent);
+        border-radius:50%;
+    }
+    .om-glow{
+        position:absolute; top:64px; left:50%; transform:translateX(-50%);
+        width:120px; height:120px; border-radius:50%;
+        background:radial-gradient(circle, var(--gold-soft) 0%, transparent 70%);
+        display:flex; align-items:center; justify-content:center;
+    }
+    .om-glow span{ font-size:64px; color:var(--vermilion); font-family:'Yatra One'; text-shadow:0 0 22px rgba(240,164,0,.65); }
+    .lamp{ position:absolute; bottom:56px; width:20px; height:26px; }
+    .lamp.l1{ left:26px; } .lamp.l2{ right:26px; }
+    .lamp .base{ width:20px; height:10px; background:var(--turmeric-deep); border-radius:0 0 10px 10px; }
+    .lamp .flame{
+        width:8px; height:14px; margin:0 auto -4px; border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+        background:radial-gradient(circle at 50% 30%, #fff7d6, var(--turmeric) 60%, var(--vermilion));
+        animation:flicker 1.6s infinite ease-in-out;
+    }
+    @keyframes flicker{ 0%,100%{ transform:scaleY(1); } 50%{ transform:scaleY(1.15) translateY(-1px); } }
+    .scripture-stack{
+        position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+        width:180px; height:70px;
+    }
+    .scripture-stack .book{
+        position:absolute; left:0; width:180px; height:18px; border-radius:3px;
+        box-shadow:0 6px 10px -4px rgba(0,0,0,.35);
+    }
+    .scripture-stack .b1{ bottom:0; background:linear-gradient(90deg,var(--vermilion),#7a2020); width:180px; }
+    .scripture-stack .b2{ bottom:20px; background:linear-gradient(90deg,var(--turmeric),var(--turmeric-deep)); width:158px; left:11px; }
+    .scripture-stack .b3{ bottom:40px; background:linear-gradient(90deg,var(--maroon),#3c1010); width:136px; left:22px; }
+    .mala{
+        position:absolute; bottom:58px; left:50%; transform:translateX(-50%);
+        width:150px; height:34px; border:3px dashed var(--gold-soft); border-top:none; border-radius:0 0 80px 80px;
+        opacity:.85;
+    }
+
+    /* ===================== TRUST STRIP ===================== */
+    .features{ padding:48px 0 8px; }
+    .features .row{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+    .feature-card{ background:var(--white); border:1px solid var(--line); border-radius:16px; padding:26px 20px; text-align:center; box-shadow:var(--shadow); transition:transform .3s ease; }
+    .feature-card:hover{ transform:translateY(-4px); }
+    .feature-card .icon{
+        width:56px; height:56px; margin:0 auto 14px; border-radius:50%;
+        background:linear-gradient(180deg, var(--gold-soft), var(--turmeric));
+        display:flex; align-items:center; justify-content:center; color:var(--maroon);
+    }
+    .feature-card h4{ font-size:1rem; margin-bottom:6px; font-family:'Poppins'; font-weight:600; }
+    .feature-card p{ color:var(--ink-soft); font-size:.88rem; margin:0; }
+
+    /* ===================== SECTION HEADERS ===================== */
+    .section{ padding:64px 0; }
+    .section-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px; flex-wrap:wrap; gap:16px; }
+    .section-head h2{ font-size:2rem; }
+
+    /* ===================== SHOP BY DEITY ===================== */
+    .deity-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:20px; }
+    .deity-card{
+        background:var(--white); border:1px solid var(--line); border-radius:16px; padding:22px 14px; text-align:center;
+        box-shadow:var(--shadow); transition:transform .18s ease;
+    }
+    .deity-card:hover{ transform:translateY(-5px); }
+    .deity-card .ring{
+        width:66px; height:66px; margin:0 auto 12px; border-radius:50%;
+        border:2px solid var(--turmeric); display:flex; align-items:center; justify-content:center;
+        font-size:1.5rem; color:var(--vermilion); background:var(--paper);
+    }
+    .deity-card h4{ font-size:.95rem; font-family:'Poppins'; font-weight:600; margin-bottom:4px; }
+    .deity-card p{ font-size:.78rem; color:var(--ink-soft); margin:0; }
+
+    /* ===================== BOOK GRID - 4 per row ===================== */
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .book-card {
+        background: var(--white);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid var(--line);
+    }
+
+    .book-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -12px rgba(43,30,16,0.4);
+    }
+
+    .book-cover {
+        position: relative;
+        height: 280px;
+        overflow: hidden;
+        background: var(--cream);
+    }
+
+    .book-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .book-card:hover .book-cover img {
+        transform: scale(1.05);
+    }
+
+    /* ===================== WISHLIST BUTTON ===================== */
+    .wishlist-btn {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink-soft);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        z-index: 2;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .wishlist-btn:hover {
+        background: var(--vermilion);
+        color: #fff;
+        border-color: var(--vermilion);
+        transform: scale(1.1);
+    }
+
+    .wishlist-btn i { transition: all 0.3s ease; }
+    .wishlist-btn:hover i { transform: scale(1.1); }
+    .wishlist-btn.active { background: var(--vermilion); color: #fff; border-color: var(--vermilion); }
+    .wishlist-btn.active i { font-weight: 900; }
+
+    .discount-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--vermilion);
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(156,43,43,0.3);
+        z-index: 2;
+    }
+
+    .book-info { padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+
+    .genre-tag {
+        align-self: flex-start;
+        background: var(--paper);
+        color: var(--ink-soft);
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--gold-soft);
+    }
+
+    .book-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: var(--ink);
+        line-height: 1.3;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .book-author { color: var(--ink-soft); font-size: 0.85rem; margin: 0; }
+    .book-rating { display: flex; align-items: center; gap: 3px; }
+    .book-rating i { color: var(--turmeric); font-size: 0.8rem; }
+    .book-rating .rating-count { color: var(--ink-soft); font-size: 0.75rem; margin-left: 4px; }
+    .book-pricing { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+    .original-price { color: var(--ink-soft); text-decoration: line-through; font-size: 0.85rem; }
+    .discount-price { font-weight: 700; font-size: 1.2rem; color: var(--maroon); }
+    .book-actions { display: grid; grid-template-columns: 1fr 0.7fr; gap: 10px; margin-top: 6px; }
+
+    .btn-view {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        padding: 10px 16px; border: 1.5px solid var(--turmeric); border-radius: 999px;
+        color: var(--turmeric-deep); font-weight: 600; font-size: 0.8rem; transition: all 0.3s ease; text-decoration: none;
+    }
+    .btn-view:hover { background: var(--turmeric); color: #fff; transform: translateY(-2px); }
+
+    .btn-cart {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        padding: 10px 16px; background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep));
+        border: none; border-radius: 999px; color: #fff; font-weight: 600; font-size: 0.8rem;
+        transition: all 0.3s ease; text-decoration: none; cursor: pointer; position: relative;
+    }
+    .btn-cart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(201,125,0,0.5); }
+    .btn-cart.loading{ opacity:.65; pointer-events:none; }
+    .btn-cart.loading i{ animation: spin .7s linear infinite; }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    .no-books { grid-column: 1 / -1; text-align: center; padding: 60px 20px; }
+    .no-books img { margin: 0 auto 20px; width: 180px; }
+    .no-books h4 { font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 8px; }
+    .no-books p { color: var(--ink-soft); }
+
+    /* ===================== GENRE CHIPS ===================== */
+    .tabs{ display:flex; gap:10px; flex-wrap:wrap; }
+    .tab-btn{
+        border:1px solid var(--line); background:var(--white); color:var(--ink-soft);
+        padding:9px 18px; border-radius:999px; font-family:'Poppins'; font-weight:600; cursor:pointer; font-size:.85rem;
+        text-decoration: none; transition: all 0.3s ease;
+    }
+    .tab-btn.active, .tab-btn:hover{ background:var(--maroon); color:var(--gold-soft); border-color:var(--maroon); }
+
+    .genre-cloud{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .genre-chip{
+        border:1px dashed var(--gold); color:var(--ink-soft); background:var(--paper);
+        padding:8px 16px; border-radius:999px; font-size:.82rem; font-family:'Poppins';
+        text-decoration: none; transition: all 0.3s ease;
+    }
+    .genre-chip:hover{ background:var(--turmeric); color:#fff; border-style:solid; }
+
+    /* ===================== PROMO BANNER ===================== */
+    .promo{ background:linear-gradient(120deg, var(--maroon) 55%, #3c1010); border-radius:22px; color:var(--gold-soft); padding:54px; position:relative; overflow:hidden; }
+    .promo .grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:40px; align-items:center; }
+    .promo h3{ color:#fff; font-size:1.9rem; margin-bottom:14px; }
+    .promo p{ color:var(--gold-soft); opacity:.9; max-width:420px; margin-bottom:24px; }
+    .promo-seal{
+        justify-self:end; width:180px; height:180px; border-radius:50%; border:3px dashed var(--turmeric);
+        display:flex; align-items:center; justify-content:center; text-align:center; font-family:'Poppins'; color:var(--turmeric); font-weight:700;
+    }
+    .promo-seal b{ display:block; font-size:1.9rem; font-family:'Yatra One'; font-weight:400; }
+
+    /* ===================== BESTSELLER STRIP ===================== */
+    .strip-scroll{ display:flex; gap:22px; overflow-x:auto; padding-bottom:14px; scroll-snap-type:x mandatory; }
+    .strip-scroll::-webkit-scrollbar{ height:6px; }
+    .strip-scroll::-webkit-scrollbar-track{ background:var(--paper); border-radius:10px; }
+    .strip-scroll::-webkit-scrollbar-thumb{ background:var(--turmeric); border-radius:10px; }
+    .strip-scroll .book-card{ min-width:220px; scroll-snap-align:start; }
+    .rank{
+        position:absolute; top:-10px; left:-10px; width:32px; height:32px; border-radius:50%;
+        background:var(--vermilion); color:#fff; display:flex; align-items:center; justify-content:center;
+        font-family:'Poppins'; font-weight:700; box-shadow:var(--shadow); z-index:2;
+        border:2px solid var(--white);
+    }
+    .card-wrap{ position:relative; }
+
+    /* ===================== TRUST / STATS ===================== */
+    .stats-wrap{ background:var(--paper); border-radius:22px; padding:48px; }
+    .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+    .stat i{ color:var(--vermilion); font-size:1.3rem; margin-bottom:10px; }
+    .stat h3{ font-size:2.1rem; font-family:'Poppins'; font-weight:700; }
+    .stat p{ color:var(--ink-soft); margin:4px 0 0; font-size:.8rem; text-transform:uppercase; letter-spacing:1px; font-family:'Poppins'; }
+
+    /* ===================== FOOTER ===================== */
+    footer{ background:var(--maroon); color:var(--gold-soft); padding:56px 0 22px; margin-top:36px; }
+    .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:34px; padding-bottom:32px; border-bottom:1px solid rgba(243,218,156,.2); }
+    footer h4{ color:#fff; margin-bottom:14px; font-size:1.02rem; font-family:'Poppins'; font-weight:600; }
+    footer p, footer a{ color:var(--gold-soft); opacity:.82; font-size:.9rem; }
+    footer ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; }
+    footer ul a:hover{ opacity:1; text-decoration:underline; }
+    .footer-newsletter{ display:flex; margin-top:12px; border-radius:999px; overflow:hidden; }
+    .footer-newsletter input{ flex:1; border:none; padding:11px 16px; font-family:'Poppins'; }
+    .footer-newsletter button{ border:none; background:var(--turmeric); color:#fff; padding:0 18px; font-family:'Poppins'; font-weight:600; cursor:pointer; }
+    .footer-newsletter button:hover{ background:var(--turmeric-deep); }
+    .footer-bottom{ display:flex; justify-content:space-between; align-items:center; padding-top:20px; flex-wrap:wrap; gap:10px; font-size:.8rem; opacity:.72; }
+    .socials{ display:flex; gap:10px; }
+    .socials a{ width:34px; height:34px; border:1px solid rgba(243,218,156,.3); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all .3s ease; }
+    .socials a:hover{ background:var(--turmeric); border-color:var(--turmeric); transform:translateY(-2px); }
+
+    /* ===================== CART DRAWER (Sreeyang-style layout) ===================== */
+    .cart-overlay{
+        position:fixed; inset:0; background:rgba(43,30,16,.55);
+        opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:200;
+    }
+    .cart-overlay.open{ opacity:1; visibility:visible; }
+
+    .cart-drawer{
+        position:fixed; top:0; right:0; height:100vh; width:430px; max-width:92vw;
+        background:var(--white); box-shadow:-24px 0 50px -20px rgba(43,30,16,.5);
+        transform:translateX(100%); transition:transform .35s ease;
+        z-index:201; display:flex; flex-direction:column;
+    }
+    .cart-drawer.open{ transform:translateX(0); }
+
+    .cart-drawer-header{
+        display:flex; align-items:center; justify-content:space-between;
+        padding:22px 24px; border-bottom:1px solid var(--line); flex-shrink:0;
+    }
+    .cart-drawer-header h3{ font-family:'Poppins'; font-weight:700; font-size:1.15rem; letter-spacing:.2px; }
+    .cart-close-btn{
+        width:34px; height:34px; border-radius:50%; border:none; background:var(--cream);
+        display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-soft);
+        transition:all .3s ease; font-size:1rem;
+    }
+    .cart-close-btn:hover{ background:var(--vermilion); color:#fff; }
+
+    /* free-shipping progress */
+    .cart-shipping-bar{ display:flex; align-items:center; gap:12px; padding:16px 24px 6px; flex-shrink:0; }
+    .shipping-icon{
+        width:30px; height:30px; border-radius:50%; border:1.5px solid var(--turmeric);
+        display:flex; align-items:center; justify-content:center; color:var(--turmeric-deep); flex-shrink:0; font-size:.8rem;
+    }
+    .shipping-track{ flex:1; height:6px; background:var(--line); border-radius:10px; overflow:hidden; }
+    .shipping-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--turmeric),var(--turmeric-deep)); transition:width .4s ease; }
+    .shipping-text{ padding:0 24px 14px; font-size:.78rem; color:var(--ink-soft); flex-shrink:0; }
+    .shipping-text b{ color:var(--maroon); }
+
+    /* urgency timer */
+    .cart-urgency{
+        margin:0 24px 16px; background:var(--paper); border:1px dashed var(--gold); border-radius:10px;
+        padding:10px 14px; display:flex; align-items:center; gap:10px; font-size:.8rem; color:var(--vermilion); flex-shrink:0;
+    }
+    .cart-urgency i{ color:var(--vermilion); }
+    .cart-urgency b{ color:var(--maroon); font-family:'Poppins'; }
+
+    .cart-drawer-body{ flex:1; overflow-y:auto; padding:4px 24px 10px; display:flex; flex-direction:column; }
+    .cart-drawer-body::-webkit-scrollbar{ width:6px; }
+    .cart-drawer-body::-webkit-scrollbar-thumb{ background:var(--gold); border-radius:10px; }
+
+    .cart-item{
+        display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--line); position:relative;
+    }
+    .cart-item:last-child{ border-bottom:none; }
+    .cart-item img{ width:64px; height:82px; object-fit:cover; border-radius:8px; flex-shrink:0; border:1px solid var(--line); }
+    .cart-item-info{ flex:1; min-width:0; padding-right:34px; }
+    .cart-item-genre{ display:block; font-size:.66rem; text-transform:uppercase; letter-spacing:.5px; color:var(--turmeric-deep); font-weight:600; margin-bottom:3px; }
+    .cart-item-info h5{ font-family:'Poppins'; font-weight:600; font-size:.9rem; margin:0 0 4px; line-height:1.3; }
+    .cart-item-price{ font-weight:700; color:var(--ink); font-size:.92rem; margin-bottom:10px; }
+
+    .qty-control{
+        display:inline-flex; align-items:center; gap:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; width:fit-content;
+    }
+    .qty-btn{
+        border:none; background:var(--cream); width:26px; height:26px; cursor:pointer; color:var(--ink-soft);
+        font-weight:700; font-size:.9rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    }
+    .qty-btn:hover{ background:var(--turmeric); color:#fff; }
+    .qty-control span{ width:30px; text-align:center; font-size:.85rem; font-family:'Poppins'; font-weight:600; }
+
+    .cart-item-icons{ position:absolute; top:16px; right:0; display:flex; flex-direction:column; gap:12px; align-items:center; }
+    .icon-trash, .icon-edit{ border:none; background:none; color:var(--ink-soft); cursor:pointer; font-size:.9rem; padding:2px; }
+    .icon-trash:hover{ color:var(--vermilion); }
+    .icon-edit:hover{ color:var(--turmeric-deep); }
+
+    .cart-empty{ text-align:center; padding:70px 20px; color:var(--ink-soft); display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .cart-empty i{ font-size:2.4rem; color:var(--gold); }
+    .cart-loading{ text-align:center; padding:70px; color:var(--turmeric-deep); font-size:1.8rem; }
+    .cart-loading i{ animation: spin .8s linear infinite; }
+
+    .cart-drawer-footer{ padding:18px 24px 22px; border-top:1px solid var(--line); background:var(--white); flex-shrink:0; }
+    .cart-subtotal-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Poppins'; }
+    .cart-subtotal-row span:first-child{ color:var(--ink-soft); font-size:.92rem; }
+    .cart-subtotal-row span:last-child{ font-weight:700; font-size:1.35rem; color:var(--maroon); }
+
+    .btn-view-cart{
+        display:flex; align-items:center; justify-content:center; width:100%;
+        border:1.5px solid var(--ink); background:var(--white); color:var(--ink);
+        border-radius:10px; padding:14px; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+        font-size:.82rem; margin-bottom:10px; font-family:'Poppins'; transition:all .25s ease;
+    }
+    .btn-view-cart:hover{ background:var(--cream); }
+    .btn-checkout{
+        display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+        background:var(--ink); color:#fff; border-radius:10px; padding:14px; font-weight:700;
+        letter-spacing:.6px; text-transform:uppercase; font-size:.82rem; font-family:'Poppins'; transition:all .25s ease;
+    }
+    .btn-checkout:hover{ background:var(--maroon); }
+    .btn-checkout i{ color:var(--turmeric); }
+
+    /* floating help / whatsapp bubble */
+    .help-float{
+        position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%;
+        background:#25D366; display:flex; align-items:center; justify-content:center;
+        box-shadow:var(--shadow); z-index:150; color:#fff; font-size:1.5rem; transition:transform .2s ease;
+    }
+    .help-float:hover{ transform:scale(1.08); }
+
+    .toast{
+        position:fixed; bottom:24px; left:24px; background:var(--maroon); color:#fff;
+        padding:14px 22px; border-radius:12px; font-family:'Poppins'; font-size:.88rem;
+        box-shadow:var(--shadow); z-index:300; opacity:0; transform:translateY(12px);
+        transition:all .3s ease; display:flex; align-items:center; gap:10px;
+    }
+    .toast.show{ opacity:1; transform:translateY(0); }
+    .toast i{ color:var(--turmeric); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width:992px){
+        .hero .grid{ grid-template-columns:1fr; }
+        .hero-art{ height:320px; }
+        .features .row, .stats-grid, .footer-grid{ grid-template-columns:repeat(2,1fr); }
+        .deity-grid{ grid-template-columns:repeat(3,1fr); }
+        .book-grid{ grid-template-columns:repeat(2,1fr); }
+        .promo .grid{ grid-template-columns:1fr; }
+        .promo-seal{ justify-self:start; }
+        .nav-links{ display:none; }
+    }
+    @media (max-width:768px){
+        .deity-grid{ grid-template-columns:repeat(2,1fr); }
+        .book-grid{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:560px){
+        .hero h2{ font-size:2.1rem; }
+        .features .row, .stats-grid, .footer-grid, .deity-grid{ grid-template-columns:repeat(2,1fr); }
+        .book-grid{ grid-template-columns:1fr; }
+        .book-actions{ grid-template-columns:1fr; }
+        .promo{ padding:30px 20px; }
+        .promo-seal{ width:120px; height:120px; font-size:.8rem; }
+        .promo-seal b{ font-size:1.4rem; }
+        .stats-wrap{ padding:24px; }
+        .cart-drawer{ width:100vw; max-width:100vw; }
+        .toast{ left:16px; right:16px; bottom:90px; }
+        .help-float{ bottom:20px; right:20px; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="topbar">
+    <div class="container">
+        <div><i class="fas fa-map-marker-alt"></i>Thiruvananthapuram, Kerala, India</div>
+        <div class="top-links">
+            <a href="#">About Us</a>
+            <a href="#">Become a Distributor</a>
+            <a href="#">Gift a Scripture</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/myapp/user_homepage/" class="brand">
+            <span class="mark">&#2384;</span>
+            <div>
+                <h1>Yathisha Books</h1>
+                <span>Sacred Texts & Spiritual Wisdom</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/myapp/user_homepage/" class="active">Home</a></li>
+            <li><a href="#deities">Shop by Deity</a></li>
+            <li><a href="#shelf">Sacred Texts</a></li>
+            <li><a href="#bestsellers">Most Read</a></li>
+            <li><a href="#bot">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="/myapp/search_books/" class="icon-btn">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="/myapp/view_wishlist/" class="icon-btn">
+                <i class="fas fa-heart"></i>
+                <span class="badge" style="{% if wishlist_count > 0 %}display:flex;{% else %}display:none;{% endif %}">{{ wishlist_count|default:0 }}</span>
+            </a>
+            <!-- Cart icon: clicking this OPENS the right-side drawer instead of navigating away -->
+            <a href="/myapp/view_cart/" class="icon-btn" id="cartIconBtn">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="badge" id="cartCountBadge" style="{% if cart_count > 0 %}display:flex;{% else %}display:none;{% endif %}">{{ cart_count|default:0 }}</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+    <div class="container grid">
+        <div>
+            <p class="eyebrow">Yathisha Books &mdash; a house of sacred texts</p>
+            <h2>Wisdom of the <em>Vedas</em>,<br>bound for your shelf</h2>
+            <p class="lede">From the Bhagavad Gita to the Devi Mahatmyam, from Sri Vidya to Yoga Shastra — every text curated and verified by our team, for the seeker who reads with devotion.</p>
+            <div class="searchbar">
+                <select>
+                    <option>All Genres</option>
+                    <option>Vedas</option>
+                    <option>Puranas</option>
+                    <option>Bhagavad Gita</option>
+                    <option>Stotras & Sahasranamas</option>
+                    <option>Tantra</option>
+                </select>
+                <input type="text" placeholder="Search by title, deity, or tradition">
+                <a href="#" class="btn btn-gold" style="padding:12px 20px;"><i class="fas fa-search"></i></a>
+            </div>
+            <div class="cta-row">
+                <a href="#shelf" class="btn btn-gold">Explore Sacred Texts</a>
+                <a href="#deities" class="btn btn-outline">Shop by Deity</a>
+            </div>
+        </div>
+        <div class="hero-art">
+            <div class="arch"></div>
+            <div class="om-glow"><span>&#2384;</span></div>
+            <div class="mala"></div>
+            <div class="lamp l1"><div class="flame"></div><div class="base"></div></div>
+            <div class="lamp l2"><div class="flame"></div><div class="base"></div></div>
+            <div class="scripture-stack">
+                <div class="book b3"></div>
+                <div class="book b2"></div>
+                <div class="book b1"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ===================== TRUST STRIP ===================== -->
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-truck"></i></div>
+                <h4>Free Delivery</h4>
+                <p>On orders above &#8377;500</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-check-double"></i></div>
+                <h4>Verified Editions</h4>
+                <p>Every text checked by our team</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-undo-alt"></i></div>
+                <h4>7-Day Returns</h4>
+                <p>Damaged or wrong item, no questions</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-hands-praying"></i></div>
+                <h4>Trusted by Devotees</h4>
+                <p>18,000+ seekers served</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container"><div class="ornament-divider">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3c3 3 3 6 0 9-3-3-3-6 0-9Z"/><path d="M12 12c4 1 6 4 6 7-4 0-6-2-6-4-0 2-2 4-6 4 0-3 2-6 6-7Z"/></svg>
+</div></div>
+
+<!-- ===================== SHOP BY DEITY ===================== -->
+<section class="section" id="deities">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Begin your search</p>
+                <h2>Shop by Deity & Tradition</h2>
+            </div>
+        </div>
+        <div class="deity-grid">
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-om"></i></div><h4>Shiva</h4><p>Shaiva Tradition</p></a>
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-water"></i></div><h4>Vishnu</h4><p>Vaishnava Tradition</p></a>
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-fire"></i></div><h4>Devi</h4><p>Shakta Tradition</p></a>
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-star-of-life"></i></div><h4>Ganesha</h4><p>Puranas</p></a>
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-feather"></i></div><h4>Krishna</h4><p>Bhagavad Gita</p></a>
+            <a href="#" class="deity-card"><div class="ring"><i class="fas fa-bow-arrow"></i></div><h4>Rama</h4><p>Ramayana</p></a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== SACRED TEXTS SHELF ===================== -->
+<section class="section" id="shelf" style="background:var(--white);">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">The Yathisha Books</p>
+                <h2>Explore Sacred Texts</h2>
+            </div>
+            <div class="tabs">
+                <a href="/myapp/user_homepage/" class="tab-btn active">All Books</a>
+                {% for g in genres %}
+                <a href="?genre={{ g }}" class="tab-btn">{{ g }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Book Grid - 4 per row -->
+        <div class="book-grid">
+            {% for book in books %}
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+
+                    <!-- Wishlist Button -->
+                    <a href="/myapp/add_to_wishlist/{{ book.id }}/" class="wishlist-btn" title="Add to Wishlist">
+                        <i class="far fa-heart"></i>
+                    </a>
+
+                    <!-- Discount Badge -->
+                    {% if book.discount_price %}
+                    <span class="discount-badge">Sale</span>
+                    {% endif %}
+                </div>
+
+                <div class="book-info">
+                    <span class="genre-tag">{{ book.genre }}</span>
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">{{ book.author }}</p>
+
+                    <div class="book-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="rating-count">({{ book.review_count|default:0 }})</span>
+                    </div>
+
+                    <div class="book-pricing">
+                        {% if book.discount_price %}
+                        <span class="original-price">₹{{ book.actual_price }}</span>
+                        <span class="discount-price">₹{{ book.discount_price }}</span>
+                        {% else %}
+                        <span class="discount-price">₹{{ book.actual_price }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="book-actions">
+                        <a href="/myapp/user_view_book_details/{{ book.id }}/" class="btn-view">
+                            <i class="fas fa-eye"></i> View Details
+                        </a>
+                        <!-- Add to Cart: JS intercepts this click, calls the URL via AJAX, and opens the cart drawer -->
+                        <a href="/myapp/add_to_cart/{{ book.id }}/" class="btn-cart" data-book-id="{{ book.id }}">
+                            <i class="fas fa-shopping-cart"></i> Add
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-books">
+                <img src="{% static 'images/no-books.png' %}" alt="No books available">
+                <h4>No Books Available</h4>
+                <p>Please check back later for new additions.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Genre Chips -->
+        <div class="mt-5">
+            <p class="eyebrow">Browse by Category</p>
+            <div class="genre-cloud">
+                {% for g in genres %}
+                <a href="?genre={{ g }}" class="genre-chip">{{ g }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container"><div class="ornament-divider">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3c3 3 3 6 0 9-3-3-3-6 0-9Z"/><path d="M12 12c4 1 6 4 6 7-4 0-6-2-6-4-0 2-2 4-6 4 0-3 2-6 6-7Z"/></svg>
+</div></div>
+
+<!-- ===================== PROMO BANNER ===================== -->
+<section class="container">
+    <div class="promo">
+        <div class="grid">
+            <div>
+                <p class="eyebrow" style="color:var(--turmeric);">This week only</p>
+                <h3>Navaratri Reading Collection</h3>
+                <p>A hand-picked set of Devi Mahatmyam, Lalita Sahasranama and Durga Saptashati &mdash; bundled together for the nine nights of the Goddess.</p>
+                <a href="#" class="btn btn-gold">View the Collection</a>
+            </div>
+            <div class="promo-seal"><span><b>20%</b>OFF THE<br>BUNDLE</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== MOST READ / LATEST BOOKS ===================== -->
+<section class="section" id="bestsellers">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Reader Favourites</p>
+                <h2>Latest Sacred Texts</h2>
+            </div>
+            <a href="#shelf" class="btn btn-outline" style="padding:8px 20px; font-size:0.85rem;">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="strip-scroll">
+            {% for book in latest_books %}
+            <div class="card-wrap">
+                <span class="rank">{{ forloop.counter }}</span>
+                <div class="book-card">
+                    <div class="book-cover" style="height:200px; overflow:hidden; position:relative;">
+                        <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" style="width:100%; height:100%; object-fit:cover;">
+                        {% if book.discount_price %}
+                        <span class="discount-badge" style="top:8px; right:8px; font-size:0.6rem; padding:4px 10px;">Sale</span>
+                        {% endif %}
+                        <span class="genre-tag" style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.6); color:#fff; border:none; font-size:0.6rem;">
+                            {{ book.genre }}
+                        </span>
+                    </div>
+                    <div class="book-info" style="padding:14px;">
+                        <h3 class="book-title" style="font-size:0.95rem; -webkit-line-clamp:1;">{{ book.title }}</h3>
+                        <p class="book-author" style="font-size:0.75rem;">{{ book.author }}</p>
+                        <div class="book-pricing" style="margin-top:2px;">
+                            {% if book.discount_price %}
+                            <span class="original-price" style="font-size:0.7rem;">₹{{ book.actual_price }}</span>
+                            <span class="discount-price" style="font-size:1rem;">₹{{ book.discount_price }}</span>
+                            {% else %}
+                            <span class="discount-price" style="font-size:1rem;">₹{{ book.actual_price }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="book-actions" style="margin-top:6px; grid-template-columns:1fr 0.7fr;">
+                            <a href="/myapp/user_view_book_details/{{ book.id }}/" class="btn-view" style="padding:6px 12px; font-size:0.7rem;">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="/myapp/add_to_cart/{{ book.id }}/" class="btn-cart" data-book-id="{{ book.id }}" style="padding:6px 12px; font-size:0.7rem;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align:center; padding:40px; width:100%;">
+                <p style="color:var(--ink-soft);">No books available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section class="section">
+    <div class="container">
+        <div class="stats-wrap">
+            <div class="stats-grid">
+                <div class="stat"><i class="fas fa-book-open"></i><h3>2,150</h3><p>Sacred texts listed</p></div>
+                <div class="stat"><i class="fas fa-users"></i><h3>18,600</h3><p>Seekers served</p></div>
+                <div class="stat"><i class="fas fa-om"></i><h3>29</h3><p>Genres & traditions</p></div>
+                <div class="stat"><i class="fas fa-star"></i><h3>4.9</h3><p>Average rating</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer id="bot">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4>Yathisha Books</h4>
+                <p>A digital home for the Vedas, the Puranas, and every text in between &mdash; chosen with care, for readers who study with devotion.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div>
+                <h4>Traditions</h4>
+                <ul>
+                    <li><a href="#">Shaiva Tradition</a></li>
+                    <li><a href="#">Vaishnava Tradition</a></li>
+                    <li><a href="#">Shakta Tradition</a></li>
+                    <li><a href="#">Sri Vidya</a></li>
+                    <li><a href="#">Tantra</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">My Orders</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Track a Package</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Reach Us</h4>
+                <p>Thiruvananthapuram, Kerala, India</p>
+                <p>hello@yathishagranthalaya.example</p>
+                <p>+91 00000 00000</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; Yathisha Granthalaya. All rights reserved.</span>
+            <span>&#2384; Sarve Bhavantu Sukhinah &#2384;</span>
+        </div>
+    </div>
+</footer>
+
+<!-- ===================== CART DRAWER (right-side slide-in, Sreeyang-style) ===================== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+
+    <div class="cart-drawer-header">
+        <h3 id="cartDrawerTitle">Shopping Cart 0</h3>
+        <button class="cart-close-btn" id="cartCloseBtn"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="cart-shipping-bar">
+        <div class="shipping-icon"><i class="fas fa-truck"></i></div>
+        <div class="shipping-track"><div class="shipping-fill" id="shippingFill"></div></div>
+    </div>
+    <p class="shipping-text" id="shippingText">Free Shipping for all orders over &#8377;500</p>
+
+    <div class="cart-urgency" id="cartUrgency">
+        <i class="fas fa-fire"></i>
+        <span>Products are limited, checkout within <b id="cartTimer">5:00</b></span>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerBody">
+        <div class="cart-empty">
+            <i class="fas fa-shopping-bag"></i>
+            <p>Your cart is empty</p>
+            <a href="#shelf" class="btn btn-gold" onclick="document.getElementById('cartCloseBtn').click();">Browse Sacred Texts</a>
+        </div>
+    </div>
+
+    <div class="cart-drawer-footer">
+        <div class="cart-subtotal-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">&#8377;0</span>
+        </div>
+        <a href="/myapp/view_cart/" class="btn-view-cart">View Cart</a>
+        <a href="/myapp/checkout/" class="btn-checkout"><i class="fas fa-lock"></i> Checkout</a>
+    </div>
+</aside>
+
+<!-- Floating quick-help bubble, styled to match the reference -->
+<a href="https://wa.me/910000000000" target="_blank" class="help-float" title="Chat with us">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<div class="toast" id="cartToast"><i class="fas fa-check-circle"></i><span id="cartToastText">Added to cart</span></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const cartDrawer     = document.getElementById('cartDrawer');
+    const cartOverlay    = document.getElementById('cartOverlay');
+    const cartBody       = document.getElementById('cartDrawerBody');
+    const cartBadge      = document.getElementById('cartCountBadge');
+    const cartTitle      = document.getElementById('cartDrawerTitle');
+    const cartSubtotal   = document.getElementById('cartSubtotal');
+    const shippingFill   = document.getElementById('shippingFill');
+    const shippingText   = document.getElementById('shippingText');
+    const cartTimerEl    = document.getElementById('cartTimer');
+    const cartIconBtn    = document.getElementById('cartIconBtn');
+    const cartCloseBtn   = document.getElementById('cartCloseBtn');
+    const toast          = document.getElementById('cartToast');
+    const toastText      = document.getElementById('cartToastText');
+
+    const FREE_SHIPPING_THRESHOLD = 500; /* keep this in sync with the "Free Delivery" trust-strip card */
+    let timerInterval;
+
+    /* ---------- countdown timer (resets every time the drawer opens) ---------- */
+    function startCartTimer() {
+        clearInterval(timerInterval);
+        let seconds = 5 * 60;
+        renderTimer(seconds);
+        timerInterval = setInterval(function () {
+            seconds--;
+            if (seconds <= 0) { seconds = 0; clearInterval(timerInterval); }
+            renderTimer(seconds);
+        }, 1000);
+    }
+    function renderTimer(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        cartTimerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    /* ---------- open / close ---------- */
+    function openCart() {
+        cartDrawer.classList.add('open');
+        cartOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        startCartTimer();
+    }
+    function closeCart() {
+        cartDrawer.classList.remove('open');
+        cartOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+        clearInterval(timerInterval);
+    }
+    cartCloseBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCart(); });
+
+    cartIconBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openCart();
+        loadCart();
+    });
+
+    /* ---------- toast ---------- */
+    function showToast(msg) {
+        toastText.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    /* ---------- render cart contents ----------
+       Expected JSON shape from the backend:
+       {
+         "success": true,
+         "cart_count": 3,
+         "cart_total": 897,
+         "cart_items": [
+           {"id":1,"title":"Bhagavad Gita","genre":"Bhagavad Gita","price":349,
+            "image":"/media/covers/gita.jpg","quantity":1}
+         ]
+       }
+    ---------------------------------------------- */
+    function renderCart(data) {
+        const count = data.cart_count || 0;
+        const total = data.cart_total || 0;
+
+        cartTitle.textContent = 'Shopping Cart ' + count;
+        cartBadge.textContent = count;
+        cartBadge.style.display = count > 0 ? 'flex' : 'none';
+        cartSubtotal.textContent = '₹' + total;
+
+        /* free-shipping progress bar */
+        const pct = Math.min(100, (total / FREE_SHIPPING_THRESHOLD) * 100);
+        shippingFill.style.width = pct + '%';
+        if (total >= FREE_SHIPPING_THRESHOLD) {
+            shippingText.innerHTML = '&#127881; You have unlocked <b>Free Shipping!</b>';
+        } else {
+            shippingText.innerHTML = 'Add <b>&#8377;' + (FREE_SHIPPING_THRESHOLD - total) + '</b> more for Free Shipping';
+        }
+
+        if (!data.cart_items || data.cart_items.length === 0) {
+            cartBody.innerHTML =
+                '<div class="cart-empty">' +
+                    '<i class="fas fa-shopping-bag"></i>' +
+                    '<p>Your cart is empty</p>' +
+                    '<a href="#shelf" class="btn btn-gold" onclick="document.getElementById(\'cartCloseBtn\').click();">Browse Sacred Texts</a>' +
+                '</div>';
+            return;
+        }
+
+        let html = '';
+        data.cart_items.forEach(function (item) {
+            html +=
+                '<div class="cart-item" data-id="' + item.id + '">' +
+                    '<img src="' + item.image + '" alt="' + item.title + '">' +
+                    '<div class="cart-item-info">' +
+                        '<span class="cart-item-genre">' + (item.genre || '') + '</span>' +
+                        '<h5>' + item.title + '</h5>' +
+                        '<div class="cart-item-price">₹' + item.price + '</div>' +
+                        '<div class="qty-control">' +
+                            '<button class="qty-btn minus" data-id="' + item.id + '">−</button>' +
+                            '<span>' + item.quantity + '</span>' +
+                            '<button class="qty-btn plus" data-id="' + item.id + '">+</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="cart-item-icons">' +
+                        '<button class="icon-trash" data-id="' + item.id + '" title="Remove"><i class="fas fa-trash-alt"></i></button>' +
+                        '<a class="icon-edit" href="/myapp/user_view_book_details/' + item.id + '/" title="View / Edit"><i class="fas fa-pen"></i></a>' +
+                    '</div>' +
+                '</div>';
+        });
+        cartBody.innerHTML = html;
+    }
+
+    /* ---------- fetch full cart (used when opening the drawer via the navbar icon) ---------- */
+    function loadCart() {
+        cartBody.innerHTML = '<div class="cart-loading"><i class="fas fa-spinner"></i></div>';
+        fetch('/myapp/view_cart/', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(res => res.json())
+            .then(renderCart)
+            .catch(function () {
+                cartBody.innerHTML =
+                    '<div class="cart-empty"><i class="fas fa-exclamation-circle"></i>' +
+                    '<p>Could not load your cart.<br>Open the full cart page instead.</p>' +
+                    '<a href="/myapp/view_cart/" class="btn btn-gold">Go to Cart</a></div>';
+            });
+    }
+
+    /* ---------- Add to Cart: intercept every .btn-cart click, anywhere on the page ---------- */
+    document.body.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-cart');
+        if (!btn) return;
+        e.preventDefault();
+
+        const url = btn.getAttribute('href');
+        btn.classList.add('loading');
+
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(res => res.json())
+            .then(function (data) {
+                btn.classList.remove('loading');
+                renderCart(data);
+                openCart();
+                showToast('Added to your cart');
+            })
+            .catch(function () {
+                btn.classList.remove('loading');
+                /* Backend isn't returning JSON yet for this view — fall back to a normal page visit
+                   so the "Add to Cart" button still works while the AJAX endpoint is wired up. */
+                window.location.href = url;
+            });
+    });
+
+    /* ---------- quantity + remove controls inside the drawer ---------- */
+    cartBody.addEventListener('click', function (e) {
+        const removeBtn = e.target.closest('.icon-trash');
+        const plusBtn   = e.target.closest('.qty-btn.plus');
+        const minusBtn  = e.target.closest('.qty-btn.minus');
+
+        if (removeBtn) {
+            fetch('/myapp/remove_from_cart/' + removeBtn.dataset.id + '/', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.json()).then(renderCart);
+        }
+        if (plusBtn) {
+            fetch('/myapp/update_cart/' + plusBtn.dataset.id + '/?action=increase', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.json()).then(renderCart);
+        }
+        if (minusBtn) {
+            fetch('/myapp/update_cart/' + minusBtn.dataset.id + '/?action=decrease', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.json()).then(renderCart);
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YATHISHA BOOKS | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+        
+        :root {
+            --primary: #7C2D4F;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #D97757 0%, #B45309 100%);
+        }
+
+        .book-shadow {
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+    </style>
+</head>
+<body class="bg-[#f8f1e9] min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Left: Login Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 bg-white">
+            <div class="w-full max-w-md">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 mb-10">
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#7C2D4F] to-[#9F4A6E] rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-inner">
+                        Y
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold tracking-tight text-[#7C2D4F] heading-font">YATHISHA</h1>
+                        <p class="text-xs text-gray-500 -mt-1">BOOKS</p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-4xl font-semibold text-[#7C2D4F] heading-font">Welcome Back</h2>
+                    <p class="text-gray-600 mt-2">Login to continue your spiritual journey with Yathisha Books</p>
+                </div>
+
+                <!-- Form -->
+                <form class="space-y-6" action="/myapp/admin_login_post/" method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <input type="email"  name="username"
+                                   class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#7C2D4F] transition-colors"
+                                   placeholder="Enter your email address">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <input type="password" 
+                                   id="password" name="password"
+                                   class="w-full pl-11 pr-12 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:border-[#7C2D4F] transition-colors"
+                                   placeholder="Enter your password">
+                            <button type="button" onclick="togglePassword()" 
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 accent-[#7C2D4F]">
+                            <span class="text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-[#7C2D4F] hover:underline">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-[#7C2D4F] hover:bg-[#5F223C] transition-colors text-white py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 shadow-lg shadow-[#7C2D4F]/30">
+                        <i class="fas fa-arrow-right"></i>
+                        Login
+                    </button>
+                </form>
+
+
+                <!-- Trust Signals -->
+                <div class="flex justify-center gap-8 mt-12 text-xs text-gray-500">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Login</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-lock"></i>
+                        <span>Your Data is Safe</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <i class="fas fa-headset"></i>
+                        <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Hero Image -->
+        <div class="hidden lg:flex lg:w-1/2 hero-bg relative overflow-hidden items-center justify-center p-12">
+            <div class="absolute inset-0 bg-[radial-gradient(at_bottom_right,#00000022_0%,transparent_70%)]"></div>
+            
+            <!-- Decorative Elements -->
+            <div class="absolute top-12 right-12 text-white/30 text-8xl rotate-12">🪔</div>
+            <div class="absolute bottom-20 left-16 text-white/20 text-7xl -rotate-12">📿</div>
+
+            <div class="relative z-10 max-w-lg">
+                <div class="text-white text-center mb-12">
+                    <h2 class="text-5xl font-bold heading-font leading-tight">Books that inspire.<br>Wisdom that transforms.</h2>
+                    <p class="mt-4 text-white/90 text-lg">Explore our collection of spiritual books and elevate your soul.</p>
+                </div>
+
+                <!-- Books Stack -->
+                <div class="relative h-[420px] flex items-end justify-center">
+                    <!-- Book 1 -->
+                    <div class="absolute left-8 bottom-12 w-44 bg-[#4A2C1B] text-white rounded-lg overflow-hidden book-shadow rotate-[-12deg] transition-transform hover:rotate-0">
+                        <div class="h-64 bg-gradient-to-b from-amber-900 to-[#3C2316] flex items-center justify-center text-center p-4">
+                            <div>
+                                <div class="text-xs tracking-widest">BHAGAVAD GITA</div>
+                                <div class="text-lg font-semibold mt-1 leading-tight">The Song of the Lord</div>
+                            </div>
+                        </div>
+                        <div class="h-8 bg-gradient-to-r from-amber-800 to-amber-950"></div>
+                    </div>
+
+                    <!-- Book 2 -->
+                    <div class="absolute left-1/2 -translate-x-1/2 bottom-8 w-48 bg-[#EDE4D9] text-amber-950 rounded-lg overflow-hidden book-shadow z-20 transition-transform hover:-translate-y-4">
+                        <div class="h-72 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center p-6 text-center">
+                            <div>
+                                <div class="text-amber-800 text-sm">DEVI MAHATMYAM</div>
+                                <div class="font-bold text-xl mt-1">The Glory of the Divine Mother</div>
+                            </div>
+                        </div>
+                        <div class="h-6 bg-amber-800"></div>
+                    </div>
+
+                    <!-- Book 3 -->
+                    <div class="absolute right-8 bottom-20 w-40 bg-[#1F2937] text-white rounded-lg overflow-hidden book-shadow rotate-[10deg] transition-transform hover:rotate-0">
+                        <div class="h-56 bg-gradient-to-b from-slate-800 to-black flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-amber-400 text-xs">UPANISHADS</div>
+                                <div class="font-medium mt-1">Timeless Wisdom</div>
+                            </div>
+                        </div>
+                        <div class="h-10 bg-gradient-to-r from-slate-700 to-black"></div>
+                    </div>
+                </div>
+
+                <!-- Bottom Accents -->
+                <div class="flex justify-center gap-8 mt-12 text-white/70">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-book text-3xl"></i>
+                        <div>
+                            <div class="text-xs">SHIVA PURANA</div>
+                        </div>
+                    </div>
+                    <div class="w-px h-10 bg-white/30"></div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-spa text-3xl"></i>
+                        <div>
+                            <div class="text-xs">YOGA SUTRAS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Hero (visible on small screens) -->
+    <div class="lg:hidden bg-gradient-to-br from-amber-700 to-orange-800 py-12 px-6 text-white">
+        <div class="max-w-md mx-auto text-center">
+            <h2 class="text-3xl font-bold heading-font">Books that inspire.<br>Wisdom that transforms.</h2>
+            <p class="mt-3 opacity-90">Explore spiritual books to elevate your soul.</p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+       
+
+        // Tailwind script already included
+        console.log("%cYATHISHA BOOKS Login Page Loaded Successfully", "color:#7C2D4F; font-family:monospace; font-size:12px");
+    </script>
+</body>
+</html>

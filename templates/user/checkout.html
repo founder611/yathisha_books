@@ -1,0 +1,1018 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Yathisha Books</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    
+    <style>
+        /* All your existing styles here - kept same */
+        :root {
+            --white: #ffffff;
+            --cream: #FFFCF3;
+            --paper: #FFF6DE;
+            --turmeric: #F0A400;
+            --turmeric-deep: #C97D00;
+            --gold: #D9A441;
+            --gold-soft: #F3DA9C;
+            --vermilion: #9C2B2B;
+            --maroon: #5A1B1B;
+            --ink: #2B1E10;
+            --ink-soft: #6B583C;
+            --line: #EEDCA6;
+            --shadow: 0 18px 40px -18px rgba(43,30,16,.35);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== TOP BAR ===== */
+        .topbar { background: var(--maroon); color: var(--gold-soft); font-size: .82rem; }
+        .topbar .container { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; flex-wrap: wrap; gap: 6px; }
+        .topbar i { color: var(--turmeric); margin-right: 6px; }
+        .topbar .top-links a { margin-left: 18px; color: var(--gold-soft); opacity: .85; }
+        .topbar .top-links a:hover { opacity: 1; }
+
+        /* ===== NAVBAR ===== */
+        .navbar { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand .mark {
+            width: 46px; height: 46px; border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--turmeric) 75%);
+            display: flex; align-items: center; justify-content: center; color: var(--maroon);
+            font-size: 1.4rem; box-shadow: inset 0 0 0 2px var(--white);
+        }
+        .brand h1 { font-size: 1.5rem; }
+        .brand span { display: block; font-size: .68rem; letter-spacing: 2px; color: var(--ink-soft); text-transform: uppercase; font-family: 'Poppins'; }
+
+        .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { font-family: 'Poppins'; font-weight: 600; font-size: .92rem; position: relative; padding-bottom: 4px; }
+        .nav-links a:hover { color: var(--vermilion); }
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+        .icon-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: center; position: relative;
+            color: var(--ink); background: var(--cream);
+            transition: all 0.3s ease;
+        }
+        .icon-btn:hover {
+            background: var(--turmeric);
+            color: #fff;
+            border-color: var(--turmeric);
+            transform: translateY(-2px);
+        }
+        .icon-btn .badge {
+            position: absolute; top: -6px; right: -6px; background: var(--vermilion); color: #fff;
+            font-size: .65rem; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--white);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+            font-family: 'Poppins'; font-weight: 600; border-radius: 999px; padding: 13px 26px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-gold { background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep)); color: #fff; box-shadow: 0 10px 22px -8px rgba(201,125,0,.55); }
+        .btn-gold:hover { box-shadow: 0 14px 28px -10px rgba(201,125,0,.7); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--maroon); color: var(--maroon); }
+        .btn-outline:hover { background: var(--maroon); color: #fff; }
+        .btn-dark { background: var(--ink); color: #fff; }
+        .btn-dark:hover { background: var(--maroon); }
+
+        /* ===== CHECKOUT ===== */
+        .checkout-section {
+            padding: 40px 0 60px;
+            background: var(--cream);
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* ===== LEFT - CHECKOUT FORM ===== */
+        .checkout-form {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 32px 36px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .checkout-form h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 24px;
+            color: var(--ink);
+        }
+
+        .checkout-form .breadcrumb {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            margin-bottom: 20px;
+        }
+
+        .checkout-form .breadcrumb a {
+            color: var(--vermilion);
+        }
+
+        .checkout-form .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: var(--ink);
+        }
+
+        .form-group label .required {
+            color: var(--vermilion);
+        }
+
+        .form-group .sub-label {
+            font-weight: 400;
+            color: var(--ink-soft);
+            font-size: 0.75rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--turmeric);
+            box-shadow: 0 0 0 3px rgba(240,164,0,0.15);
+        }
+
+        .form-control::placeholder {
+            color: var(--ink-soft);
+            opacity: 0.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Contact Section */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 28px 0;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--turmeric);
+        }
+
+        /* Delivery Method */
+        .delivery-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .delivery-option {
+            padding: 10px 24px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .delivery-option:hover {
+            border-color: var(--turmeric);
+        }
+
+        .delivery-option.active {
+            border-color: var(--turmeric);
+            background: var(--paper);
+        }
+
+        .delivery-option input {
+            display: none;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--turmeric);
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Payment Methods */
+        .payment-option {
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .payment-option:hover {
+            border-color: var(--turmeric);
+        }
+
+        .payment-option.active {
+            border-color: var(--turmeric);
+            background: var(--paper);
+        }
+
+        .payment-option input {
+            display: none;
+        }
+
+        .payment-option .payment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--turmeric-deep);
+            flex-shrink: 0;
+        }
+
+        .payment-option .payment-info {
+            flex: 1;
+        }
+
+        .payment-option .payment-info .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .payment-option .payment-info .desc {
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+        }
+
+        .payment-option .payment-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .payment-option.active .payment-radio {
+            border-color: var(--turmeric);
+        }
+
+        .payment-option.active .payment-radio::after {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--turmeric);
+        }
+
+        /* Pay Now Button */
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.05rem;
+            justify-content: center;
+            margin-top: 8px;
+            border-radius: 12px;
+            background: var(--ink);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .pay-btn:hover {
+            background: var(--maroon);
+            transform: translateY(-2px);
+        }
+
+        .pay-btn i {
+            color: var(--turmeric);
+        }
+
+        /* ===== RIGHT - ORDER SUMMARY ===== */
+        .order-summary {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-summary h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .order-item {
+            display: flex;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item img {
+            width: 56px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            flex-shrink: 0;
+        }
+
+        .order-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .order-item-details .item-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .order-item-details .item-meta {
+            font-size: 0.7rem;
+            color: var(--ink-soft);
+        }
+
+        .order-item-details .item-price {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--maroon);
+        }
+
+        .order-totals {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line);
+        }
+
+        .order-totals .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .order-totals .row.total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding-top: 10px;
+            border-top: 2px solid var(--line);
+            margin-top: 6px;
+            color: var(--maroon);
+        }
+
+        .order-totals .row .label {
+            color: var(--ink-soft);
+        }
+
+        .order-totals .row .value {
+            font-weight: 600;
+        }
+
+        .order-totals .row.total .value {
+            font-size: 1.3rem;
+        }
+
+        /* ===== MESSAGES ===== */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .messages li {
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .messages .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .messages .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .messages .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .messages .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--maroon);
+            color: var(--gold-soft);
+            padding: 56px 0 22px;
+            margin-top: 36px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: 34px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(243,218,156,.2);
+        }
+        footer h4 {
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 1.02rem;
+            font-family: 'Poppins';
+            font-weight: 600;
+        }
+        footer p, footer a {
+            color: var(--gold-soft);
+            opacity: .82;
+            font-size: .9rem;
+        }
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        footer ul a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        .footer-newsletter {
+            display: flex;
+            margin-top: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .footer-newsletter input {
+            flex: 1;
+            border: none;
+            padding: 11px 16px;
+            font-family: 'Poppins';
+        }
+        .footer-newsletter button {
+            border: none;
+            background: var(--turmeric);
+            color: #fff;
+            padding: 0 18px;
+            font-family: 'Poppins';
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .footer-newsletter button:hover {
+            background: var(--turmeric-deep);
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: .8rem;
+            opacity: .72;
+        }
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+        .socials a {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(243,218,156,.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+        .socials a:hover {
+            background: var(--turmeric);
+            border-color: var(--turmeric);
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            .order-summary {
+                position: relative;
+                top: 0;
+            }
+            .nav-links {
+                display: none;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .checkout-form {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .form-row-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .delivery-options {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .checkout-form {
+                padding: 16px;
+            }
+            .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .order-summary {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+    <div class="container">
+        <div><i class="fas fa-map-marker-alt"></i>Thiruvananthapuram, Kerala, India</div>
+        <div class="top-links">
+            <a href="#">About Us</a>
+            <a href="#">Become a Distributor</a>
+            <a href="#">Gift a Scripture</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/myapp/user_homepage/" class="brand">
+            <span class="mark">&#2384;</span>
+            <div>
+                <h1>Yathisha Books</h1>
+                <span>Sacred Texts & Spiritual Wisdom</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/myapp/user_homepage/">Home</a></li>
+            <li><a href="/myapp/user_homepage/#deities">Shop by Deity</a></li>
+            <li><a href="/myapp/user_homepage/#shelf">Sacred Texts</a></li>
+            <li><a href="/myapp/user_homepage/#bestsellers">Most Read</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="/myapp/search_books/" class="icon-btn">
+                <i class="fas fa-search"></i>
+            </a>
+            <a href="/myapp/view_wishlist/" class="icon-btn">
+                <i class="fas fa-heart"></i>
+                <span class="badge" style="{% if wishlist_count > 0 %}display:flex;{% else %}display:none;{% endif %}">{{ wishlist_count|default:0 }}</span>
+            </a>
+            <a href="/myapp/view_cart/" class="icon-btn">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="badge" style="{% if cart_count > 0 %}display:flex;{% else %}display:none;{% endif %}">{{ cart_count|default:0 }}</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== CHECKOUT SECTION ===== -->
+<section class="checkout-section">
+    <div class="container">
+        <!-- Messages -->
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="checkout-grid">
+            <!-- ===== LEFT - CHECKOUT FORM ===== -->
+            <form class="checkout-form" method="POST" action="/myapp/place_order/" id="checkoutForm">
+                {% csrf_token %}
+                
+                <div class="breadcrumb">
+                    <a href="/myapp/user_homepage/">Home</a>
+                    <i class="fas fa-chevron-right" style="font-size:0.6rem; margin:0 8px; color:var(--ink-soft);"></i>
+                    <a href="/myapp/view_cart/">Cart</a>
+                    <i class="fas fa-chevron-right" style="font-size:0.6rem; margin:0 8px; color:var(--ink-soft);"></i>
+                    <span>Checkout</span>
+                </div>
+
+                <h2>Contact</h2>
+                <div class="form-group">
+                    <label>Email or mobile phone number <span class="required">*</span></label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter your email or phone" value="{{ user.email }}" required>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2>Delivery</h2>
+
+                <!-- Delivery Method -->
+                <div class="delivery-options">
+                    <label class="delivery-option active">
+                        <input type="radio" name="delivery_method" value="ship" checked>
+                        Ship
+                    </label>
+                    <label class="delivery-option">
+                        <input type="radio" name="delivery_method" value="pickup">
+                        Pickup
+                    </label>
+                </div>
+
+                <!-- Address Form -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country/Region <span class="required">*</span></label>
+                        <select class="form-control" name="country" required>
+                            <option value="IN" selected>India</option>
+                            <option value="US">United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="CA">Canada</option>
+                            <option value="AU">Australia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First name <span class="sub-label">(optional)</span></label>
+                        <input type="text" class="form-control" name="first_name" placeholder="First name">
+                    </div>
+                    <div class="form-group">
+                        <label>Last name <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="fullname" placeholder="Last name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Address <span class="required">*</span></label>
+                    <input type="text" class="form-control" name="address" placeholder="Street address" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Apartment, suite, etc. <span class="sub-label">(optional)</span></label>
+                    <input type="text" class="form-control" name="apartment" placeholder="Apartment, suite, etc.">
+                </div>
+
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label>City <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State <span class="required">*</span></label>
+                        <select class="form-control" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="KL">Kerala</option>
+                            <option value="TN">Tamil Nadu</option>
+                            <option value="KA">Karnataka</option>
+                            <option value="AP">Andhra Pradesh</option>
+                            <option value="MH">Maharashtra</option>
+                            <option value="DL">Delhi</option>
+                            <option value="UP">Uttar Pradesh</option>
+                            <option value="WB">West Bengal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>PIN code <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="pincode" placeholder="PIN code" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone <span class="required">*</span></label>
+                    <input type="tel" class="form-control" name="phone" placeholder="Phone number" required>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="save_address" name="save_address">
+                    <label for="save_address">Save this information for next time</label>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2><i class="fas fa-truck"></i> Shipping method</h2>
+                <p style="color:var(--ink-soft); font-size:0.9rem; margin-bottom:16px;">
+                    Enter your shipping address to view available shipping methods.
+                </p>
+
+                <hr class="section-divider">
+
+                <h2><i class="fas fa-lock"></i> Payment</h2>
+                <p style="color:var(--ink-soft); font-size:0.85rem; margin-bottom:16px;">
+                    All transactions are secure and encrypted.
+                </p>
+
+                <div class="payment-option active">
+                    <input type="radio" name="payment_method" value="cod" checked>
+                    <div class="payment-icon"><i class="fas fa-rupee-sign"></i></div>
+                    <div class="payment-info">
+                        <div class="name">Cash on Delivery</div>
+                        <div class="desc">Pay when you receive the order.</div>
+                    </div>
+                    <div class="payment-radio"></div>
+                </div>
+
+                <div class="payment-option">
+                    <input type="radio" name="payment_method" value="razorpay">
+                    <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
+                    <div class="payment-info">
+                        <div class="name">Razorpay (Cards, UPI, NetBanking)</div>
+                        <div class="desc">Secure payment via Razorpay gateway.</div>
+                    </div>
+                    <div class="payment-radio"></div>
+                </div>
+
+                <hr class="section-divider">
+
+                <h2>Billing address</h2>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="same_as_shipping" name="same_as_shipping" checked>
+                    <label for="same_as_shipping">Same as shipping address</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="different_billing" name="different_billing">
+                    <label for="different_billing">Use a different billing address</label>
+                </div>
+
+                <button type="submit" class="btn pay-btn" id="placeOrderBtn">
+                    <i class="fas fa-lock"></i> Pay now
+                </button>
+            </form>
+
+            <!-- ===== RIGHT - ORDER SUMMARY ===== -->
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+
+                {% for item in cart_items %}
+                <div class="order-item">
+                    <img src="{{ item.book.cover_image.url }}" alt="{{ item.book.title }}">
+                    <div class="order-item-details">
+                        <div class="item-title">{{ item.book.title }}</div>
+                        <div class="item-meta">{{ item.quantity }} × ₹{{ item.book.discount_price|default:item.book.actual_price }}</div>
+                        <div class="item-price">₹{{ item.subtotal|floatformat:2 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="order-totals">
+                    <div class="row">
+                        <span class="label">Subtotal - {{ cart_items|length }} items</span>
+                        <span class="value">₹{{ total|floatformat:2 }}</span>
+                    </div>
+                    <div class="row">
+                        <span class="label">Shipping</span>
+                        <span class="value" style="color:var(--ink-soft);">Enter shipping address</span>
+                    </div>
+                    <div class="row total">
+                        <span class="label">Total</span>
+                        <span class="value">₹{{ total|floatformat:2 }}</span>
+                    </div>
+                    <div style="text-align:center; margin-top:12px; font-size:0.85rem; color:var(--ink-soft);">
+                        INR ₹{{ total|floatformat:2 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4>Yathisha Books</h4>
+                <p>A digital home for the Vedas, the Puranas, and every text in between.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div>
+                <h4>Traditions</h4>
+                <ul>
+                    <li><a href="#">Shaiva Tradition</a></li>
+                    <li><a href="#">Vaishnava Tradition</a></li>
+                    <li><a href="#">Shakta Tradition</a></li>
+                    <li><a href="#">Sri Vidya</a></li>
+                    <li><a href="#">Tantra</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">My Orders</a></li>
+                    <li><a href="/myapp/view_wishlist/">Wishlist</a></li>
+                    <li><a href="#">Track a Package</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Reach Us</h4>
+                <p>Thiruvananthapuram, Kerala, India</p>
+                <p>hello@yathishagranthalaya.example</p>
+                <p>+91 00000 00000</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; Yathisha Granthalaya. All rights reserved.</span>
+            <span>&#2384; Sarve Bhavantu Sukhinah &#2384;</span>
+        </div>
+    </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Delivery method toggle
+    document.querySelectorAll('.delivery-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.delivery-option').forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    // Payment method toggle
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    // Place Order
+    document.getElementById('placeOrderBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Basic validation
+        const requiredFields = document.querySelectorAll('.form-control[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = 'var(--vermilion)';
+                isValid = false;
+            } else {
+                field.style.borderColor = '';
+            }
+        });
+        
+        if (!isValid) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        this.disabled = true;
+        
+        // Check payment method
+        const selectedPayment = document.querySelector('.payment-option.active input');
+        if (selectedPayment && selectedPayment.value === 'razorpay') {
+            // Redirect to Razorpay
+            window.location.href = '/myapp/razorpay-payment/';
+            return;
+        }
+        
+        // Submit form for COD
+        document.getElementById('checkoutForm').submit();
+    });
+});
+</script>
+
+</body>
+</html>

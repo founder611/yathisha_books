@@ -1,0 +1,959 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }} | Yathisha Books</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ book.title }} - Sacred text available at Yathisha Books">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+    <style>
+    :root {
+        --white: #ffffff;
+        --cream: #FFFCF3;
+        --paper: #FFF6DE;
+        --turmeric: #F0A400;
+        --turmeric-deep: #C97D00;
+        --gold: #D9A441;
+        --gold-soft: #F3DA9C;
+        --vermilion: #9C2B2B;
+        --maroon: #5A1B1B;
+        --ink: #2B1E10;
+        --ink-soft: #6B583C;
+        --line: #EEDCA6;
+        --shadow: 0 18px 40px -18px rgba(43,30,16,.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--ink);
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.7;
+    }
+    h1, h2, h3, h4 { font-family: 'Yatra One', cursive; font-weight: 400; margin: 0; color: var(--ink); }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===================== TOP BAR ===================== */
+    .topbar { background: var(--maroon); color: var(--gold-soft); font-size: .82rem; }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; flex-wrap: wrap; gap: 6px; }
+    .topbar i { color: var(--turmeric); margin-right: 6px; }
+    .topbar .top-links a { margin-left: 18px; color: var(--gold-soft); opacity: .85; }
+    .topbar .top-links a:hover { opacity: 1; }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar { background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand .mark {
+        width: 46px; height: 46px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--turmeric) 75%);
+        display: flex; align-items: center; justify-content: center; color: var(--maroon);
+        font-size: 1.4rem; box-shadow: inset 0 0 0 2px var(--white);
+    }
+    .brand h1 { font-size: 1.5rem; }
+    .brand span { display: block; font-size: .68rem; letter-spacing: 2px; color: var(--ink-soft); text-transform: uppercase; font-family: 'Poppins'; }
+
+    .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { font-family: 'Poppins'; font-weight: 600; font-size: .92rem; position: relative; padding-bottom: 4px; }
+    .nav-links a:hover { color: var(--vermilion); }
+    .nav-actions { display: flex; align-items: center; gap: 16px; }
+    .icon-btn {
+        width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
+        display: flex; align-items: center; justify-content: center; position: relative;
+        color: var(--ink); background: var(--cream);
+    }
+    .icon-btn .badge {
+        position: absolute; top: -6px; right: -6px; background: var(--vermilion); color: #fff;
+        font-size: .65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .btn {
+        display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+        font-family: 'Poppins'; font-weight: 600; border-radius: 999px; padding: 13px 26px;
+        transition: all 0.3s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-gold { background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep)); color: #fff; box-shadow: 0 10px 22px -8px rgba(201,125,0,.55); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--maroon); color: var(--maroon); }
+    .btn-outline:hover { background: var(--maroon); color: #fff; }
+
+    /* ===================== BOOK DETAILS ===================== */
+    .book-detail-section {
+        padding: 50px 0 60px;
+        background: var(--white);
+    }
+
+    .book-detail-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 50px;
+        align-items: start;
+    }
+
+    /* Left - Image Gallery */
+    .book-gallery {
+        position: sticky;
+        top: 100px;
+    }
+
+    .main-image {
+        background: var(--cream);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid var(--line);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+    }
+
+    .main-image img {
+        width: 100%;
+        height: 500px;
+        object-fit: contain;
+        padding: 20px;
+        background: var(--white);
+        transition: transform 0.5s ease;
+    }
+
+    .main-image img:hover {
+        transform: scale(1.02);
+    }
+
+    .thumbnail-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .thumbnail {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid var(--line);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: 80px;
+        background: var(--cream);
+    }
+
+    .thumbnail:hover {
+        border-color: var(--turmeric);
+        transform: translateY(-3px);
+    }
+
+    .thumbnail.active {
+        border-color: var(--turmeric-deep);
+        box-shadow: 0 0 0 3px var(--gold-soft);
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Right - Book Info */
+    .book-info-detail {
+        padding: 10px 0;
+    }
+
+    .breadcrumb {
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+        margin-bottom: 16px;
+    }
+
+    .breadcrumb a {
+        color: var(--vermilion);
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .book-info-detail .genre-tag {
+        display: inline-block;
+        background: var(--paper);
+        color: var(--ink-soft);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 6px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--gold-soft);
+        margin-bottom: 12px;
+    }
+
+    .book-info-detail h1 {
+        font-family: 'Yatra One', cursive;
+        font-size: 2.4rem;
+        line-height: 1.2;
+        margin-bottom: 6px;
+        color: var(--ink);
+    }
+
+    .book-info-detail .author-name {
+        font-size: 1.1rem;
+        color: var(--ink-soft);
+        margin-bottom: 16px;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+    }
+
+    .book-info-detail .author-name i {
+        color: var(--gold);
+        margin-right: 6px;
+    }
+
+    .rating-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+        padding: 12px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .rating-section .stars {
+        color: var(--turmeric);
+        font-size: 1.1rem;
+    }
+
+    .rating-section .stars i {
+        margin-right: 2px;
+    }
+
+    .rating-section .rating-text {
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+    }
+
+    .rating-section .rating-text strong {
+        color: var(--ink);
+    }
+
+    .price-section {
+        margin: 20px 0 24px;
+        padding: 20px;
+        background: var(--cream);
+        border-radius: 16px;
+        border: 1px solid var(--line);
+    }
+
+    .price-section .current-price {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--maroon);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .price-section .original-price {
+        font-size: 1.2rem;
+        color: var(--ink-soft);
+        text-decoration: line-through;
+        margin-left: 14px;
+    }
+
+    .price-section .discount-badge {
+        display: inline-block;
+        background: var(--vermilion);
+        color: #fff;
+        padding: 4px 16px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 14px;
+    }
+
+    .price-section .tax-info {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--ink-soft);
+        margin-top: 6px;
+    }
+
+    .availability {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 16px 0;
+        font-size: 0.9rem;
+    }
+
+    .availability .in-stock {
+        color: #2d7d46;
+        font-weight: 600;
+    }
+
+    .availability .in-stock i {
+        color: #2d7d46;
+        margin-right: 6px;
+    }
+
+    .availability .out-of-stock {
+        color: var(--vermilion);
+        font-weight: 600;
+    }
+
+    .description-section {
+        margin: 24px 0 30px;
+    }
+
+    .description-section h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        color: var(--ink);
+    }
+
+    .description-section p {
+        color: var(--ink-soft);
+        line-height: 1.8;
+        font-size: 0.95rem;
+    }
+
+    .book-details-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 30px;
+        margin: 20px 0 30px;
+        padding: 20px;
+        background: var(--cream);
+        border-radius: 16px;
+        border: 1px solid var(--line);
+    }
+
+    .book-details-list .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px dashed var(--line);
+    }
+
+    .book-details-list .detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .book-details-list .detail-label {
+        color: var(--ink-soft);
+        font-size: 0.85rem;
+    }
+
+    .book-details-list .detail-value {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--ink);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin: 30px 0 20px;
+    }
+
+    .action-buttons .btn {
+        padding: 14px 32px;
+        font-size: 1rem;
+    }
+
+    .btn-cart-large {
+        background: linear-gradient(180deg, var(--turmeric), var(--turmeric-deep));
+        color: #fff;
+        box-shadow: 0 10px 22px -8px rgba(201,125,0,.55);
+        flex: 1;
+        justify-content: center;
+    }
+
+    .btn-cart-large:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px -10px rgba(201,125,0,.7);
+    }
+
+    .btn-wishlist {
+        background: var(--white);
+        border: 1.5px solid var(--line);
+        color: var(--ink-soft);
+        padding: 14px 20px;
+    }
+
+    .btn-wishlist:hover {
+        border-color: var(--vermilion);
+        color: var(--vermilion);
+    }
+
+    .share-section {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+    }
+
+    .share-section span {
+        color: var(--ink-soft);
+        font-size: 0.85rem;
+    }
+
+    .share-section a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink-soft);
+        transition: all 0.3s ease;
+    }
+
+    .share-section a:hover {
+        background: var(--turmeric);
+        color: #fff;
+        border-color: var(--turmeric);
+        transform: translateY(-2px);
+    }
+
+    /* ===================== RELATED BOOKS ===================== */
+    .related-section {
+        background: var(--cream);
+        padding: 50px 0 60px;
+    }
+
+    .related-section .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .related-section .section-head h2 {
+        font-size: 1.8rem;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+
+    .related-book-card {
+        background: var(--white);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+    }
+
+    .related-book-card:hover {
+        transform: translateY(-6px);
+    }
+
+    .related-book-card .book-cover {
+        height: 180px;
+        overflow: hidden;
+        background: var(--cream);
+    }
+
+    .related-book-card .book-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .related-book-card .book-info {
+        padding: 14px;
+    }
+
+    .related-book-card .book-info h4 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .related-book-card .book-info .price {
+        font-weight: 700;
+        color: var(--maroon);
+        font-size: 1rem;
+    }
+
+    .related-book-card .book-info .original-price {
+        font-size: 0.75rem;
+        text-decoration: line-through;
+        color: var(--ink-soft);
+        margin-left: 8px;
+    }
+
+    .related-book-card .book-info .btn-view-small {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 4px 16px;
+        border: 1px solid var(--turmeric);
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--turmeric-deep);
+        transition: all 0.3s ease;
+    }
+
+    .related-book-card .book-info .btn-view-small:hover {
+        background: var(--turmeric);
+        color: #fff;
+    }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+        background: var(--maroon);
+        color: var(--gold-soft);
+        padding: 56px 0 22px;
+    }
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+        gap: 34px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(243,218,156,.2);
+    }
+    footer h4 {
+        color: #fff;
+        margin-bottom: 14px;
+        font-size: 1.02rem;
+        font-family: 'Poppins';
+        font-weight: 600;
+    }
+    footer p, footer a {
+        color: var(--gold-soft);
+        opacity: .82;
+        font-size: .9rem;
+    }
+    footer ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+    footer ul a:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+    .footer-newsletter {
+        display: flex;
+        margin-top: 12px;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+    .footer-newsletter input {
+        flex: 1;
+        border: none;
+        padding: 11px 16px;
+        font-family: 'Poppins';
+    }
+    .footer-newsletter button {
+        border: none;
+        background: var(--turmeric);
+        color: #fff;
+        padding: 0 18px;
+        font-family: 'Poppins';
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: .8rem;
+        opacity: .72;
+    }
+    .socials {
+        display: flex;
+        gap: 10px;
+    }
+    .socials a {
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(243,218,156,.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 992px) {
+        .book-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .book-gallery {
+            position: relative;
+            top: 0;
+        }
+        .main-image img {
+            height: 350px;
+        }
+        .related-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .footer-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .nav-links {
+            display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .book-details-list {
+            grid-template-columns: 1fr;
+        }
+        .action-buttons {
+            flex-direction: column;
+        }
+        .action-buttons .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .book-info-detail h1 {
+            font-size: 1.8rem;
+        }
+        .main-image img {
+            height: 250px;
+        }
+        .related-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .thumbnail-strip {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .thumbnail {
+            height: 60px;
+        }
+        .price-section .current-price {
+            font-size: 1.6rem;
+        }
+        .footer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="topbar">
+    <div class="container">
+        <div><i class="fas fa-map-marker-alt"></i>Thiruvananthapuram, Kerala, India</div>
+        <div class="top-links">
+            <a href="#">About Us</a>
+            <a href="#">Become a Distributor</a>
+            <a href="#">Gift a Scripture</a>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/myapp/user_homepage/" class="brand">
+            <span class="mark">&#2384;</span>
+            <div>
+                <h1>Yathisha Books</h1>
+                <span>Sacred Texts & Spiritual Wisdom</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/myapp/user_homepage/">Home</a></li>
+            <li><a href="/myapp/user_homepage/#deities">Shop by Deity</a></li>
+            <li><a href="/myapp/user_homepage/#shelf">Sacred Texts</a></li>
+            <li><a href="/myapp/user_homepage/#bestsellers">Most Read</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="#" class="icon-btn"><i class="fas fa-search"></i></a>
+            <a href="#" class="icon-btn"><i class="fas fa-heart"></i></a>
+            <a href="#" class="icon-btn"><i class="fas fa-shopping-bag"></i><span class="badge">2</span></a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===================== BOOK DETAILS ===================== -->
+<section class="book-detail-section">
+    <div class="container">
+        <div class="book-detail-grid">
+            <!-- Left - Image Gallery -->
+            <div class="book-gallery">
+                <div class="main-image">
+                    <img id="mainImage" src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+                </div>
+                <div class="thumbnail-strip">
+                    <!-- Main cover image as first thumbnail -->
+                    <div class="thumbnail active" onclick="changeImage('{{ book.cover_image.url }}', this)">
+                        <img src="{{ book.cover_image.url }}" alt="Cover">
+                    </div>
+                    <!-- Additional images from BookImage model -->
+                    {% for img in book_images %}
+                    <div class="thumbnail" onclick="changeImage('{{ img.image.url }}', this)">
+                        <img src="{{ img.image.url }}" alt="{{ book.title }} image {{ forloop.counter }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Right - Book Info -->
+            <div class="book-info-detail">
+                <div class="breadcrumb">
+                    <a href="/myapp/user_homepage/">Home</a>
+                    <i class="fas fa-chevron-right" style="font-size:0.6rem; margin:0 8px; color:var(--ink-soft);"></i>
+                    <a href="/myapp/user_homepage/#shelf">Sacred Texts</a>
+                    <i class="fas fa-chevron-right" style="font-size:0.6rem; margin:0 8px; color:var(--ink-soft);"></i>
+                    <span>{{ book.title }}</span>
+                </div>
+
+                <span class="genre-tag">{{ book.genre|default:"Sacred Text" }}</span>
+
+                <h1>{{ book.title }}</h1>
+
+                <p class="author-name">
+                    <i class="fas fa-user"></i> By {{ book.author|default:"Anonymous" }}
+                </p>
+
+                <!-- Rating -->
+                <div class="rating-section">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="rating-text">
+                        <strong>4.5</strong> ({{ book.review_count|default:"0" }} reviews)
+                    </span>
+                </div>
+
+                <!-- Price -->
+                <div class="price-section">
+                    {% if book.discount_price %}
+                    <span class="current-price">₹{{ book.discount_price }}</span>
+                    <span class="original-price">₹{{ book.actual_price }}</span>
+                    {% with discount_percent=book.discount_price|add:"0" %}
+                    <span class="discount-badge">{{ discount_percent }}% OFF</span>
+                    {% endwith %}
+                    {% else %}
+                    <span class="current-price">₹{{ book.actual_price }}</span>
+                    {% endif %}
+                    <span class="tax-info">Inclusive of all taxes</span>
+                </div>
+
+                <!-- Availability -->
+                <div class="availability">
+                    {% if book.stock > 0 %}
+                    <span class="in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                    <span style="color:var(--ink-soft); font-size:0.8rem;">({{ book.stock }} copies available)</span>
+                    {% else %}
+                    <span class="out-of-stock"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="description-section">
+                    <h3>About this Book</h3>
+                    <p>{{ book.description|default:"A sacred text from the Yathisha collection, curated for the modern seeker." }}</p>
+                </div>
+
+                <!-- Book Details -->
+                <div class="book-details-list">
+                    <div class="detail-item">
+                        <span class="detail-label">Genre</span>
+                        <span class="detail-value">{{ book.genre|default:"General" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Author</span>
+                        <span class="detail-value">{{ book.author|default:"Anonymous" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Stock</span>
+                        <span class="detail-value">{{ book.stock|default:"0" }} copies</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Added On</span>
+                        <span class="detail-value">{{ book.created_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="/myapp/add_to_cart/{{ book.id }}/" class="btn btn-cart-large">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </a>
+                    <a href="#" class="btn btn-wishlist">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                </div>
+
+                <!-- Share -->
+                <div class="share-section">
+                    <span>Share:</span>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== RELATED BOOKS ===================== -->
+{% if related_books %}
+<section class="related-section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">You might also like</p>
+                <h2>Related Sacred Texts</h2>
+            </div>
+            <a href="/myapp/user_homepage/#shelf" class="btn btn-outline" style="padding:8px 20px; font-size:0.85rem;">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="related-grid">
+            {% for related in related_books %}
+            <div class="related-book-card">
+                <div class="book-cover">
+                    <img src="{{ related.cover_image.url }}" alt="{{ related.title }}">
+                </div>
+                <div class="book-info">
+                    <h4>{{ related.title }}</h4>
+                    <p style="font-size:0.75rem; color:var(--ink-soft); margin:2px 0;">{{ related.author|default:"Anonymous" }}</p>
+                    <div>
+                        {% if related.discount_price %}
+                        <span class="price">₹{{ related.discount_price }}</span>
+                        <span class="original-price">₹{{ related.actual_price }}</span>
+                        {% else %}
+                        <span class="price">₹{{ related.actual_price }}</span>
+                        {% endif %}
+                    </div>
+                    <a href="/myapp/book_details/{{ related.id }}/" class="btn-view-small">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4>Yathisha Books</h4>
+                <p>A digital home for the Vedas, the Puranas, and every text in between &mdash; chosen with care, for readers who study with devotion.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div>
+                <h4>Traditions</h4>
+                <ul>
+                    <li><a href="#">Shaiva Tradition</a></li>
+                    <li><a href="#">Vaishnava Tradition</a></li>
+                    <li><a href="#">Shakta Tradition</a></li>
+                    <li><a href="#">Sri Vidya</a></li>
+                    <li><a href="#">Tantra</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="#">My Orders</a></li>
+                    <li><a href="#">Wishlist</a></li>
+                    <li><a href="#">Track a Package</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Reach Us</h4>
+                <p>Thiruvananthapuram, Kerala, India</p>
+                <p>hello@yathishagranthalaya.example</p>
+                <p>+91 00000 00000</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; Yathisha Granthalaya. All rights reserved.</span>
+            <span>&#2384; Sarve Bhavantu Sukhinah &#2384;</span>
+        </div>
+    </div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script>
+    // Image Gallery - Change main image on thumbnail click
+    function changeImage(imageUrl, element) {
+        document.getElementById('mainImage').src = imageUrl;
+        
+        // Remove active class from all thumbnails
+        document.querySelectorAll('.thumbnail').forEach(function(thumb) {
+            thumb.classList.remove('active');
+        });
+        
+        // Add active class to clicked thumbnail
+        element.classList.add('active');
+    }
+
+    // Keyboard shortcuts for navigation
+    document.addEventListener('keydown', function(e) {
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const active = document.querySelector('.thumbnail.active');
+        let index = Array.from(thumbnails).indexOf(active);
+        
+        if (e.key === 'ArrowRight') {
+            if (index < thumbnails.length - 1) {
+                thumbnails[index + 1].click();
+            }
+        } else if (e.key === 'ArrowLeft') {
+            if (index > 0) {
+                thumbnails[index - 1].click();
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
